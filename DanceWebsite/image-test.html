@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .test-container {
+            margin-bottom: 30px;
+            border: 1px solid #444;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #666;
+            margin-top: 10px;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .success {
+            background: #4caf50;
+        }
+
+        .error {
+            background: #f44336;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Bharatanatyam Reference Images Test</h1>
+    <p>Testing if the reference image URLs are accessible...</p>
+
+    <div class="test-container">
+        <h3>1. Araimandi Posture</h3>
+        <img src="https://onlinebharatanatyam.com/wp-content/uploads/2008/01/araimandi.jpg" alt="Araimandi"
+            onload="this.nextElementSibling.className='status success'; this.nextElementSibling.textContent='✓ Loaded'"
+            onerror="this.nextElementSibling.className='status error'; this.nextElementSibling.textContent='✗ Failed to load'">
+        <div class="status">Loading...</div>
+    </div>
+
+    <div class="test-container">
+        <h3>2. Hasta Mudras</h3>
+        <img src="https://onlinebharatanatyam.com/wp-content/uploads/2007/11/asamyukta_hastas.jpg" alt="Hasta Mudras"
+            onload="this.nextElementSibling.className='status success'; this.nextElementSibling.textContent='✓ Loaded'"
+            onerror="this.nextElementSibling.className='status error'; this.nextElementSibling.textContent='✗ Failed to load'">
+        <div class="status">Loading...</div>
+    </div>
+
+    <div class="test-container">
+        <h3>3. Adavu Footwork</h3>
+        <img src="https://onlinebharatanatyam.com/wp-content/uploads/2008/01/tatta_adavu.jpg" alt="Adavu"
+            onload="this.nextElementSibling.className='status success'; this.nextElementSibling.textContent='✓ Loaded'"
+            onerror="this.nextElementSibling.className='status error'; this.nextElementSibling.textContent='✗ Failed to load'">
+        <div class="status">Loading...</div>
+    </div>
+
+    <div class="test-container">
+        <h3>4. Thillana (Wikimedia)</h3>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Bharata_Natyam_dancers.jpg" alt="Thillana"
+            onload="this.nextElementSibling.className='status success'; this.nextElementSibling.textContent='✓ Loaded'"
+            onerror="this.nextElementSibling.className='status error'; this.nextElementSibling.textContent='✗ Failed to load'">
+        <div class="status">Loading...</div>
+    </div>
+
+    <script>
+        console.log('Image test page loaded');
+        console.log('Check the status indicators above each image');
+    </script>
+</body>
+
+</html>

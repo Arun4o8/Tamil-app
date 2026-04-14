@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tamil Culture Kids — Discover & Learn! 🎭</title>
+  <meta name="description" content="Explore Tamil dance, festivals, and culture through fun interactive experiences for school students!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="kids-style.css">
+
+  <style>
+    /* Landing-page specific styles */
+    body {
+      background: radial-gradient(ellipse at top, #1C0A40 0%, #0D0D1A 55%, #0A1A30 100%);
+      min-height: 100vh;
+    }
+
+    .landing-container {
+      width: 100%;
+      max-width: 414px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Floating cultural motifs */
+    .bg-motifs {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .motif {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.07;
+      animation: kFloat linear infinite;
+    }
+
+    @keyframes kFloat {
+      0%   { transform: translateY(0) rotate(0deg); }
+      50%  { transform: translateY(-20px) rotate(8deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 60px 24px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Top bar */
+    .hero-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 44px;
+    }
+
+    .hero-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-logo .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #FF6B2B, #FF8C55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      box-shadow: 0 8px 24px rgba(255,107,43,0.45);
+    }
+
+    .hero-logo .logo-info .brand {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #FF6B2B, #FFB800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      line-height: 1.1;
+    }
+
+    .hero-logo .logo-info .edition {
+      font-size: 0.62rem;
+      color: #A0A8CC;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .grade-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,184,0,0.12);
+      border: 1.5px solid rgba(255,184,0,0.35);
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #FFB800;
+    }
+
+    /* Hero Content */
+    .hero-content {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero-mascot {
+      font-size: 6rem;
+      display: block;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 8px 24px rgba(255,107,43,0.5));
+      animation: kHeroFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes kHeroFloat {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50%       { transform: translateY(-14px) rotate(3deg); }
+    }
+
+    .hero-heading {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #FFFFFF;
+      margin-bottom: 14px;
+    }
+
+    .hero-heading .highlight-orange {
+      background: linear-gradient(90deg, #FF6B2B, #FFB800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-heading .highlight-teal {
+      background: linear-gradient(90deg, #00C9A7, #009FD4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 0.98rem;
+      color: #A0A8CC;
+      line-height: 1.6;
+      margin-bottom: 10px;
+      font-weight: 600;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Feature Pills */
+    .feature-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin: 20px 0 30px;
+    }
+
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 50px;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #D0D4F0;
+      white-space: nowrap;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 0 24px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-primary {
+      width: 100%;
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #FF6B2B 0%, #FF8C55 100%);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(255,107,43,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: kPulseGlow 2s ease-in-out infinite;
+    }
+
+    .cta-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 44px rgba(255,107,43,0.6);
+    }
+
+    .cta-primary:active {
+      transform: scale(0.97);
+    }
+
+    @keyframes kPulseGlow {
+      0%, 100% { box-shadow: 0 8px 32px rgba(255,107,43,0.5); }
+      50%       { box-shadow: 0 8px 48px rgba(255,107,43,0.75); }
+    }
+
+    .cta-secondary {
+      width: 100%;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      color: #D0D4F0;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,107,43,0.35);
+      color: white;
+    }
+
+    .cta-note {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #60688A;
+      margin-top: 14px;
+      font-weight: 600;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+
+    .stat-item {
+      flex: 1;
+      text-align: center;
+      padding: 12px 8px;
+      position: relative;
+    }
+
+    .stat-item::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 20%;
+      bottom: 20%;
+      width: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .stat-item:last-child::after { display: none; }
+
+    .stat-item .stat-num {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: block;
+      background: linear-gradient(90deg, #FF6B2B, #FFB800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-item .stat-desc {
+      font-size: 0.68rem;
+      color: #60688A;
+      font-weight: 600;
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .scroll-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      margin: 0 3px;
+    }
+    .scroll-dot.active {
+      background: #FF6B2B;
+      width: 18px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="landing-container">
+
+    <!-- Floating Background Motifs -->
+    <div class="bg-motifs">
+      <span class="motif" style="top:8%; left:5%; animation-duration:7s; font-size:2.5rem;">🪷</span>
+      <span class="motif" style="top:15%; right:8%; animation-duration:9s; font-size:2rem;">🎭</span>
+      <span class="motif" style="top:35%; left:3%; animation-duration:11s; font-size:1.8rem;">🌺</span>
+      <span class="motif" style="top:45%; right:5%; animation-duration:8s; font-size:2.2rem;">🪘</span>
+      <span class="motif" style="top:62%; left:8%; animation-duration:10s;">💃</span>
+      <span class="motif" style="top:75%; right:6%; animation-duration:6s; font-size:1.6rem;">⭐</span>
+      <span class="motif" style="top:22%; left:50%; animation-duration:13s; font-size:1.5rem;">✨</span>
+      <span class="motif" style="top:55%; left:40%; animation-duration:14s; font-size:1.4rem;">🌟</span>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+      <!-- Top Bar -->
+      <div class="hero-topbar">
+        <div class="hero-logo">
+          <div class="logo-badge">🎭</div>
+          <div class="logo-info">
+            <span class="brand">XR Tamil</span>
+            <span class="edition">KIDS EDITION</span>
+          </div>
+        </div>
+        <div class="grade-badge">
+          ⭐ Grades 2 – 8
+        </div>
+      </div>
+
+      <!-- Hero Content -->
+      <div class="hero-content">
+        <span class="hero-mascot">💃</span>
+        <h1 class="hero-heading">
+          Discover<br>
+          <span class="highlight-orange">Tamil</span>
+          <span class="highlight-teal"> Culture</span><br>
+          Like Never Before!
+        </h1>
+        <p class="hero-desc">
+          Explore dances, festivals &amp; traditions through fun games and interactive learning! 🎉
+        </p>
+
+        <!-- Feature Pills -->
+        <div class="feature-pills">
+          <span class="feature-pill">💃 16 Dance Forms</span>
+          <span class="feature-pill">🎊 6 Festivals</span>
+          <span class="feature-pill">🧠 Quiz Games</span>
+          <span class="feature-pill">🎨 Color &amp; Create</span>
+          <span class="feature-pill">🌐 3 Languages</span>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-num">16+</span>
+            <span class="stat-desc">Dance Forms</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">8</span>
+            <span class="stat-desc">Quiz Rounds</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">3</span>
+            <span class="stat-desc">Languages</span>
+          </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+          <div class="scroll-dot active"></div>
+          <div class="scroll-dot"></div>
+          <div class="scroll-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <button class="cta-primary" onclick="window.location.href='kids-login.html'" id="get-started-btn">
+        🚀 Let's Start Learning!
+        <i class="fas fa-arrow-right" style="font-size:1rem;"></i>
+      </button>
+      <button class="cta-secondary" onclick="window.location.href='kids-viewer.html'" id="explore-btn">
+        Explore Without Login →
+      </button>
+      <p class="cta-note">✅ Free for all students · No ads · 100% Safe</p>
+    </div>
+  </div>
+
+  <script src="js/translations.js"></script>
+  <script src="js/app-logic.js"></script>
+  <script>
+    // Animate on load
+    document.addEventListener('DOMContentLoaded', function () {
+      // Cascade animate feature pills
+      document.querySelectorAll('.feature-pill').forEach(function(pill, i) {
+        pill.style.opacity = '0';
+        pill.style.transform = 'translateY(10px)';
+        setTimeout(function() {
+          pill.style.transition = 'all 0.4s ease';
+          pill.style.opacity = '1';
+          pill.style.transform = 'translateY(0)';
+        }, 200 + i * 80);
+      });
+
+      // Hero heading stagger
+      var heading = document.querySelector('.hero-heading');
+      if (heading) {
+        heading.style.opacity = '0';
+        heading.style.transform = 'translateY(20px)';
+        setTimeout(function() {
+          heading.style.transition = 'all 0.6s ease';
+          heading.style.opacity = '1';
+          heading.style.transform = 'translateY(0)';
+        }, 100);
+      }
+
+      // Apply language if saved
+      var saved = localStorage.getItem('selectedLanguage') || 'en';
+      if (saved !== 'en' && typeof window.changeLanguage === 'function') {
+        setTimeout(function() { window.changeLanguage(saved); }, 300);
+      }
+    });
+
+    // Scroll dot animation
+    var dots = document.querySelectorAll('.scroll-dot');
+    var idx = 0;
+    setInterval(function() {
+      dots.forEach(function(d) { d.classList.remove('active'); });
+      idx = (idx + 1) % dots.length;
+      dots[idx].classList.add('active');
+    }, 1800);
+  </script>
+</body>
+</html>

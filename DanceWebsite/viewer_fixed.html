@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XR Tamil - Heritage & Art</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Outfit:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 0 0 40px 0;
+        }
+
+        .dance-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .dance-card:active {
+            transform: scale(0.95);
+        }
+
+        .dance-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            background: #2a2a2a;
+        }
+
+        .dance-info {
+            padding: 12px;
+        }
+
+        .dance-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .dance-type {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .save-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 0 0 20px 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            white-space: nowrap;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--glass);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .view-section {
+            display: none;
+            padding: 0 20px;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .view-active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container" style="display: block; padding-bottom: 90px; overflow-y: auto;">
+
+        <!-- Header -->
+        <div class="app-header">
+            <!-- Profile (Left) -->
+            <img src="profile.png" class="profile-pic-img"
+                onerror="this.src='https://ui-avatars.com/api/?name=User&background=ff5722&color=fff'"
+                style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); cursor: pointer; margin-right: 15px;"
+                onclick="switchView('profile')">
+
+            <!-- Text (Center-ish / Left-aligned next to profile) -->
+            <div style="flex: 1;">
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Welcome to</p>
+                <h2 style="font-size: 1.5rem;">Our Culture</h2>
+            </div>
+
+            <!-- Menu Dot (Right) -->
+            <div style="position: relative;">
+                <i class="fas fa-ellipsis-v" onclick="toggleHeaderMenu()"
+                    style="color: var(--text-main); font-size: 1.2rem; cursor: pointer; opacity: 0.8; padding: 10px;"></i>
+
+
+            </div>
+        </div>
+
+        <!-- Dropdown Menu (Moved Outside Header) -->
+        <div id="header-menu" class="glass-panel"
+            style="display: none; position: absolute; top: 80px; right: 20px; width: 220px; padding: 15px; z-index: 2000; flex-direction: column; gap: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); border: 2px solid var(--primary); background: var(--bg-surface);">
+            <div onclick="switchView('about'); toggleHeaderMenu()"
+                style="padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s;"
+                onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                onmouseout="this.style.background='transparent'">
+                <i class="fas fa-info-circle" style="color: var(--primary); width: 20px;"></i>
+                <span style="font-size: 0.9rem;">About Us</span>
+            </div>
+            <div onclick="switchView('language'); toggleHeaderMenu()"
+                style="padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s;"
+                onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                onmouseout="this.style.background='transparent'">
+                <i class="fas fa-language" style="color: var(--secondary); width: 20px;"></i>
+                <span style="font-size: 0.9rem;">Language</span>
+            </div>
+            <div onclick="switchView('gender'); toggleHeaderMenu()"
+                style="padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s;"
+                onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                onmouseout="this.style.background='transparent'">
+                <i class="fas fa-venus-mars" style="color: #e91e63; width: 20px;"></i>
+                <span style="font-size: 0.9rem;">Gender</span>
+            </div>
+            <div style="height: 1px; background: var(--glass-border); margin: 5px 0;"></div>
+            <div onclick="switchView('support'); toggleHeaderMenu()"
+                style="padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s;"
+                onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                onmouseout="this.style.background='transparent'">
+                <i class="fas fa-headset" style="color: #4caf50; width: 20px;"></i>
+                <span style="font-size: 0.9rem;">Support</span>
+            </div>
+            <div onclick="switchView('settings'); toggleHeaderMenu()"
+                style="padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s;"
+                onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                onmouseout="this.style.background='transparent'">
+                <i class="fas fa-cog" style="color: var(--text-muted); width: 20px;"></i>
+                <span style="font-size: 0.9rem;">Settings</span>
+            </div>
+        </div>
+
+        <!-- VIEWS -->
+
+        <!-- 1. HOME / DASHBOARD VIEW -->
+        <div id="view-home" class="view-section view-active">
+            <div id="culture-grid-home"
+                style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px;">
+                <!-- 1. Bharatanatyam -->
+                <div class="glass-panel animate-fade-in"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px; cursor: pointer;"
+                    onclick="showCultureDetail('Bharatanatyam')">
+                    <img src="assets/cultures/bharatanatyam/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1583244532610-2ca270176b05?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Bharatanatyam</span>
+                        <button onclick="event.stopPropagation(); startTraining('Bharatanatyam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 2. Karakattam -->
+                <div class="glass-panel animate-fade-in delay-1"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px; cursor: pointer;"
+                    onclick="showCultureDetail('Karakattam')">
+                    <img src="assets/cultures/karakattam/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1610450942001-f2f2b467140e?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Karakattam</span>
+                        <button onclick="event.stopPropagation(); startTraining('Karakattam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 3. Silambattam -->
+                <div class="glass-panel animate-fade-in delay-1"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="assets/cultures/silambattam/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Silambattam</span>
+                        <button onclick="startTraining('Silambattam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 4. Kavadi Attam -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="assets/cultures/kavadiattam/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1624443105325-15632d431015?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Kavadi
+                            Attam</span>
+                        <button onclick="startTraining('Kavadi Attam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 5. Puliyattam -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="assets/cultures/puliyattam/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1547407139-3c921a66005c?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Puliyattam</span>
+                        <button onclick="startTraining('Puliyattam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 6. Therukoothu -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="assets/cultures/therukoothu/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1514302240736-b1fee5985889?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Therukoothu</span>
+                        <button onclick="startTraining('Therukoothu')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 7. Kummi -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="assets/cultures/kummi/thumb.png" style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1599707334391-7d22f70238e8?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Kummi</span>
+                        <button onclick="startTraining('Kummi')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 8. Oyillattam -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="assets/cultures/oyillattam/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1621236304198-651a21733b0d?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Oyillattam</span>
+                        <button onclick="startTraining('Oyillattam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 9. Bommalattam -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="assets/cultures/bommalattam/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1543157148-f819d161763f?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Bommalattam</span>
+                        <button onclick="startTraining('Bommalattam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 10. Villu Paatu -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="assets/cultures/villupaatu/thumb.png"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=300'">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Villu
+                            Paatu</span>
+                        <button onclick="startTraining('Villu Paatu')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 11. Kolattam -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="https://images.unsplash.com/photo-1599707334391-7d22f70238e8?auto=format&fit=crop&q=80&w=300"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Kolattam</span>
+                        <button onclick="startTraining('Kolattam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+                <!-- 12. Paraiattam -->
+                <div class="glass-panel animate-fade-in delay-2"
+                    style="padding: 0; overflow: hidden; position: relative; height: 160px;">
+                    <img src="https://images.unsplash.com/photo-1514302240736-b1fee5985889?auto=format&fit=crop&q=80&w=300"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                    <div
+                        style="padding: 15px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%;">
+                        <span
+                            style="font-size: 1rem; font-weight: 700; color: white; display: block; margin-bottom: 10px;">Paraiattam</span>
+                        <button onclick="startTraining('Paraiattam')"
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+            <h3 style="margin-bottom: 20px;">Discovery Hub</h3>
+            <div style="display: flex; flex-direction: column; gap: 0; margin-bottom: 30px;">
+                <button class="btn-secondary" onclick="alert('Starting Daily Challenge...')"
+                    style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px; width: 100%;">
+                    <i class="fas fa-trophy" style="font-size: 1.2rem; color: #ffca28;"></i>
+                    <span style="font-size: 0.9rem;">Challenge</span>
+                </button>
+                <button class="btn-secondary" onclick="switchView('quiz')"
+                    style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px; width: 100%;">
+                    <i class="fas fa-lightbulb" style="font-size: 1.2rem; color: #4caf50;"></i>
+                    <span style="font-size: 0.9rem;">Quiz</span>
+                </button>
+                <button class="btn-secondary" onclick="switchView('rules')"
+                    style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px; width: 100%;">
+                    <i class="fas fa-scroll" style="font-size: 1.2rem; color: var(--secondary);"></i>
+                    <span style="font-size: 0.9rem;">Guidelines & Rules</span>
+                </button>
+            </div>
+
+
+
+            <h3 style="margin-bottom: 15px;">Recent Activity</h3>
+            <div id="activity-list">
+                <p style="color: var(--text-muted); text-align: center; font-size: 0.9rem;">No recent activity yet.</p>
+            </div>
+        </div>
+
+        <!-- 1.5 RULES VIEW -->
+        <div id="view-rules" class="view-section">
+            <h3 style="margin-bottom: 20px; color: var(--primary);">Learning Guidelines</h3>
+            <div class="glass-panel" style="margin-bottom: 15px;">
+                <h4 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-running" style="color: var(--secondary);"></i> Learning Steps
+                </h4>
+                <ul style="color: var(--text-muted); padding-left: 20px; line-height: 1.6;">
+                    <li>Start with basic posture (Araimandi)</li>
+                    <li>Practice Mudras daily</li>
+                    <li>Follow the correct sequence of steps</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 15px;">
+                <h4 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-heartbeat" style="color: #ff5252;"></i> Safety First
+                </h4>
+                <ul style="color: var(--text-muted); padding-left: 20px; line-height: 1.6;">
+                    <li>Always warm up before starting</li>
+                    <li>Keep your back straight to avoid strain</li>
+                    <li>Stay hydrated during practice</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel">
+                <h4 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-om" style="color: #ffca28;"></i> Cultural Respect
+                </h4>
+                <ul style="color: var(--text-muted); padding-left: 20px; line-height: 1.6;">
+                    <li>Respect the traditions and Guru</li>
+                    <li>Wear appropriate practice costume</li>
+                    <li>Understand the stories behind the art</li>
+                </ul>
+            </div>
+            <button class="btn-secondary" onclick="switchView('home')" style="margin-top: 20px; width: 100%;">Back to
+                Home</button>
+        </div>
+
+        <!-- 2. EXPLORE VIEW -->
+        <div id="view-explore" class="view-section">
+            <div class="category-tabs">
+                <div class="tab active">All Dances</div>
+                <div class="tab">Classical</div>
+                <div class="tab">Folk</div>
+                <div class="tab">Martial Arts</div>
+            </div>
+
+            <div class="dance-grid">
+                <!-- 1. Bharatanatyam -->
+                <div class="dance-card" onclick="showCultureDetail('Bharatanatyam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Bharatanatyam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/bharatanatyam/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1583244532610-2ca270176b05?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Bharatanatyam</span>
+                        <span class="dance-type">Classical Dance</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2. Karakattam -->
+                <div class="dance-card" onclick="showCultureDetail('Karakattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Karakattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/karakattam/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1610450942001-f2f2b467140e?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Karakattam</span>
+                        <span class="dance-type">Folk (Pot Balance)</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 3. Silambattam -->
+                <div class="dance-card" onclick="showCultureDetail('Silambattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Silambattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/silambattam/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Silambattam</span>
+                        <span class="dance-type">Traditional Martial Arts</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 4. Kavadi Attam -->
+                <div class="dance-card" onclick="showCultureDetail('Kavadi Attam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Kavadi Attam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/kavadiattam/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1624443105325-15632d431015?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Kavadi Attam</span>
+                        <span class="dance-type">Devotional Celebration</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 5. Puliyattam -->
+                <div class="dance-card" onclick="showCultureDetail('Puliyattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Puliyattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/puliyattam/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1547407139-3c921a66005c?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Puliyattam</span>
+                        <span class="dance-type">Tiger Spirit Dance</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 6. Therukoothu -->
+                <div class="dance-card" onclick="showCultureDetail('Therukoothu')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Therukoothu')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/therukoothu/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1514302240736-b1fee5985889?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Therukoothu</span>
+                        <span class="dance-type">Ancient Street Theater</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 7. Kummi -->
+                <div class="dance-card" onclick="showCultureDetail('Kummi')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Kummi')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/kummi/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1599707334391-7d22f70238e8?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Kummi</span>
+                        <span class="dance-type">Rhythmic Rhythm & Song</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 8. Oyillattam -->
+                <div class="dance-card" onclick="showCultureDetail('Oyillattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Oyillattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/oyillattam/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1621236304198-651a21733b0d?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Oyillattam</span>
+                        <span class="dance-type">Folk Dance of Grace</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 9. Bommalattam -->
+                <div class="dance-card" onclick="showCultureDetail('Bommalattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Bommalattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/bommalattam/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1543157148-f819d161763f?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Bommalattam</span>
+                        <span class="dance-type">Traditional Puppetry</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 10. Villu Paatu -->
+                <div class="dance-card" onclick="showCultureDetail('Villu Paatu')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Villu Paatu')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="assets/cultures/villupaatu/thumb.png" class="dance-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=400'">
+                    <div class="dance-info">
+                        <span class="dance-name">Villu Paatu</span>
+                        <span class="dance-type">Bowing Storytelling</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 11. Kolattam -->
+                <div class="dance-card" onclick="showCultureDetail('Kolattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Kolattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1599707334391-7d22f70238e8?auto=format&fit=crop&q=80&w=400"
+                        class="dance-image">
+                    <div class="dance-info">
+                        <span class="dance-name">Kolattam</span>
+                        <span class="dance-type">Stick Dance</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 12. Poikkal Kuthirai Attam -->
+                <div class="dance-card" onclick="showCultureDetail('Poikkal Kuthirai Attam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Poikkal Kuthirai Attam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&q=80&w=400"
+                        class="dance-image">
+                    <div class="dance-info">
+                        <span class="dance-name">Poikkal Kuthirai</span>
+                        <span class="dance-type">Dummy Horse Dance</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 13. Mayil Aattam -->
+                <div class="dance-card" onclick="showCultureDetail('Mayil Aattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Mayil Aattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1624443105325-15632d431015?auto=format&fit=crop&q=80&w=400"
+                        class="dance-image">
+                    <div class="dance-info">
+                        <span class="dance-name">Mayil Aattam</span>
+                        <span class="dance-type">Peacock Dance</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 14. Devaraattam -->
+                <div class="dance-card" onclick="showCultureDetail('Devaraattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Devaraattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1547407139-3c921a66005c?auto=format&fit=crop&q=80&w=400"
+                        class="dance-image">
+                    <div class="dance-info">
+                        <span class="dance-name">Devaraattam</span>
+                        <span class="dance-type">Celebratory Victory Dance</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 15. Paampu Attam -->
+                <div class="dance-card" onclick="showCultureDetail('Paampu Attam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Paampu Attam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1610450942001-f2f2b467140e?auto=format&fit=crop&q=80&w=400"
+                        class="dance-image">
+                    <div class="dance-info">
+                        <span class="dance-name">Paampu Attam</span>
+                        <span class="dance-type">Snake Dance</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 16. Paraiattam -->
+                <div class="dance-card" onclick="showCultureDetail('Paraiattam')">
+                    <button class="save-btn" onclick="event.stopPropagation(); saveDance('Paraiattam')"><i
+                            class="far fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1514302240736-b1fee5985889?auto=format&fit=crop&q=80&w=400"
+                        class="dance-image">
+                    <div class="dance-info">
+                        <span class="dance-name">Paraiattam</span>
+                        <span class="dance-type">Energetic Drum Dance</span>
+                        <div
+                            style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">View
+                                Details</span>
+                            <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 3. SAVED VIEW -->
+        <div id="view-saved" class="view-section">
+            <div id="saved-list-container">
+                <div class="glass-panel" style="text-align: center; padding: 40px 20px;">
+                    <i class="fas fa-bookmark"
+                        style="font-size: 3rem; color: var(--text-muted); margin-bottom: 20px; opacity: 0.3;"></i>
+                    <p id="saved-item-text" style="color: var(--text-muted);">No saved items yet.</p>
+                    <button class="btn-primary" onclick="switchView('explore')" style="margin-top: 20px;">Explore
+                        Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. PROFILE VIEW -->
+        <div id="view-profile" class="view-section">
+            <div class="glass-panel" style="text-align: center; padding: 30px 20px;">
+                <div style="position: relative; display: inline-block; cursor: pointer;" onclick="triggerFileSelect()">
+                    <img src="profile.png" class="profile-pic-img"
+                        onerror="this.src='https://ui-avatars.com/api/?name=User&background=ff5722&color=fff'"
+                        style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 15px; object-fit: cover;">
+                    <div
+                        style="position: absolute; bottom: 15px; right: 0; background: var(--primary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #fff;">
+                        <i class="fas fa-camera" style="color: white; font-size: 0.8rem;"></i>
+                    </div>
+                </div>
+
+                <h2 style="font-size: 1.5rem; margin-bottom: 5px;" class="profile-name-display">Deepak</h2>
+                <p id="user-email" style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Loading...</p>
+
+                <div style="margin-top: 25px; display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn-secondary" onclick="editProfile()"
+                        style="padding: 10px 20px; width: auto; font-size: 0.9rem;">Edit Profile</button>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-top: 20px;">
+                <div onclick="toggleTheme()"
+                    style="padding: 15px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-moon" style="color: var(--secondary);"></i>
+                        <span>Dark Mode</span>
+                    </div>
+                    <i id="theme-toggle-icon" class="fas fa-toggle-on"
+                        style="color: var(--primary); font-size: 1.2rem;"></i>
+                </div>
+                <div onclick="handleLogout()"
+                    style="padding: 15px; display: flex; align-items: center; gap: 15px; color: #ff5252; cursor: pointer;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4.5 QUIZ VIEW -->
+        <div id="view-quiz" class="view-section">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                <button onclick="switchView('home')"
+                    style="background: none; border: none; color: var(--text-main); font-size: 1.2rem;"><i
+                        class="fas fa-arrow-left"></i></button>
+                <h3 style="margin: 0; color: var(--primary);">Cultural Quiz</h3>
+            </div>
+
+            <div id="quiz-container">
+                <div class="glass-panel" style="padding: 30px 20px; text-align: center;">
+                    <div id="quiz-intro">
+                        <i class="fas fa-lightbulb" style="font-size: 3rem; color: #ffca28; margin-bottom: 20px;"></i>
+                        <h4>Master the Heritage</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px;">Test your knowledge
+                            of Tamil Nadu's vibrant dance forms and cultural traditions.</p>
+                        <button class="btn-primary" onclick="startQuiz()" style="width: 100%;">Start Challenge</button>
+                    </div>
+
+                    <div id="quiz-active" style="display: none; text-align: left;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <span id="quiz-progress"
+                                style="font-size: 0.8rem; color: var(--secondary); font-weight: 600;">Question
+                                1 of 8</span>
+                            <span id="quiz-score-ui" style="font-size: 0.8rem; color: var(--text-muted);">Score:
+                                0</span>
+                        </div>
+                        <div
+                            style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; margin-bottom: 25px; overflow: hidden;">
+                            <div id="quiz-bar"
+                                style="width: 12.5%; height: 100%; background: var(--primary); transition: width 0.3s ease;">
+                            </div>
+                        </div>
+
+                        <h4 id="quiz-round-title"
+                            style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                            Round 1: History &
+                            Origins</h4>
+                        <h4 id="quiz-question" style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 25px;">...
+                        </h4>
+                        <div id="quiz-options" style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                            <!-- Options will be injected here -->
+                        </div>
+                    </div>
+
+                    <div id="quiz-result" style="display: none;">
+                        <i class="fas fa-trophy" style="font-size: 3.5rem; color: #ffca28; margin-bottom: 20px;"></i>
+                        <h4 style="font-size: 1.5rem; margin-bottom: 10px;">Quiz Complete!</h4>
+                        <p id="result-score-text" style="font-size: 1.1rem; margin-bottom: 5px;">You scored 6 out of 8
+                        </p>
+                        <p id="result-feedback"
+                            style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px;">
+                            Great job! You're a true cultural enthusiast.</p>
+                        <button class="btn-primary" onclick="startQuiz()" style="width: 100%; margin-bottom: 12px;">Try
+                            Again</button>
+                        <button class="btn-secondary" onclick="switchView('home')" style="width: 100%;">Back to
+                            Home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camera Modal -->
+        <div id="camera-modal"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; flex-direction: column; align-items: center; justify-content: center;">
+            <video id="webcam-feed" autoplay playsinline
+                style="width: 100%; max-width: 480px; height: 60vh; object-fit: cover; background: #222;"></video>
+            <canvas id="camera-canvas" style="display: none;"></canvas>
+
+            <div style="position: absolute; bottom: 30px; display: flex; gap: 20px; align-items: center;">
+                <button onclick="closeCamera()"
+                    style="background: rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button onclick="takePhoto()"
+                    style="width: 70px; height: 70px; border-radius: 50%; border: 4px solid white; background: transparent; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 50px; height: 50px; background: white; border-radius: 50%;"></div>
+                </button>
+                <button onclick="triggerLegacyUpload()"
+                    style="background: rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-image"></i>
+                </button>
+            </div>
+        </div>
+
+        <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+
+        <!-- 5. IMMERSIVE 3D/XR VIEW -->
+        <div id="view-immersive" class="view-section"
+            style="padding: 0; background: #000; height: 100vh; position: fixed; top: 0; left: 0; width: 100%; z-index: 2000; display: none;">
+            <div style="position: absolute; top: 20px; left: 20px; z-index: 2010;">
+                <button onclick="switchView('home')"
+                    style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 20px; border-radius: 30px; backdrop-filter: blur(10px); cursor: pointer;">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </button>
+            </div>
+
+            <div id="immersive-3d-container"
+                style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; background-image: url('cover.png'); background-size: cover; background-position: center;">
+                <div
+                    style="background: rgba(0,0,0,0.6); padding: 40px; border-radius: 20px; backdrop-filter: blur(5px); margin: 20px;">
+                    <h2 id="immersive-title" style="font-size: 2rem; margin-bottom: 20px;">3D Experience</h2>
+                    <div
+                        style="width: 100px; height: 100px; border: 4px solid var(--primary); border-top: 4px solid transparent; border-radius: 50%; animation: spin 2s linear infinite; margin: 0 auto 30px auto;">
+                    </div>
+                    <p style="font-size: 1.1rem; opacity: 0.9;">Initializing XR Immersive Space...</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px; color: var(--secondary);">Rotate your device to
+                        explore the 360° environment</p>
+                </div>
+
+                <div style="position: absolute; bottom: 50px; display: flex; gap: 20px;">
+                    <button class="btn-primary" style="padding: 15px 30px; border-radius: 30px;"><i
+                            class="fas fa-vr-cardboard"></i> Enter VR Mode</button>
+                    <button class="btn-secondary"
+                        style="padding: 15px 30px; border-radius: 30px; color: white; border-color: white;"><i
+                            class="fas fa-expand"></i> Fullscreen</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2.5 CULTURE DETAIL VIEW -->
+        <div id="view-culture-detail" class="view-section" style="padding-bottom: 100px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                <button onclick="switchView('explore')"
+                    style="background: none; border: none; color: var(--text-main); font-size: 1.2rem;"><i
+                        class="fas fa-arrow-left"></i></button>
+                <h3 id="detail-culture-name" style="margin: 0; color: var(--primary);">Art Form Details</h3>
+            </div>
+
+            <div id="detail-image-container"
+                style="width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 25px;">
+                <img id="detail-culture-image" src="" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+
+            <div id="culture-detail-content">
+                <!-- Content will be injected here -->
+            </div>
+
+            <button id="detail-start-training-btn" onclick="startTrainingFromDetail()" class="btn-primary"
+                style="margin-top: 30px; width: 100%; padding: 18px; border-radius: 12px; font-weight: 700;">Start
+                Guided
+                Learning</button>
+        </div>
+
+        <!-- 5. UNITY IMMERSIVE VIEW (UNITY BRIDGE) -->
+        <div id="view-unity" class="view-section"
+            style="padding: 0; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; background: #000; display: none;">
+            <div
+                style="position: absolute; top: 20px; left: 20px; z-index: 2001; display: flex; align-items: center; gap: 15px;">
+                <button onclick="switchView('home')"
+                    style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); cursor: pointer;">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h4 id="unity-culture-label"
+                    style="color: white; margin: 0; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                    Bharatanatyam AR/VR</h4>
+            </div>
+
+            <!-- Unity Container Placeholder -->
+            <div id="unity-container"
+                style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                <div id="unity-loading-bar"
+                    style="width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin-bottom: 20px;">
+                    <div id="unity-progress"
+                        style="width: 30%; height: 100%; background: var(--primary); transition: width 0.3s ease;">
+                    </div>
+                </div>
+                <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Connecting to Unity Engine...</p>
+                <div
+                    style="margin-top: 40px; padding: 20px; text-align: center; color: rgba(255,255,255,0.4); font-size: 0.8rem; max-width: 80%;">
+                    <i class="fas fa-microchip" style="font-size: 2rem; margin-bottom: 15px; display: block;"></i>
+                    Note: Unity WebGL build should be placed in the project root to load the 3D art form specifically
+                    from: <br>
+                    <code id="unity-path-hint" style="color: var(--secondary);">/assets/cultures/.../model.glb</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TRAINING / METHODS VIEW -->
+        <div id="view-training" class="view-section" style="padding-bottom: 100px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                <button onclick="switchView('home')"
+                    style="background: none; border: none; color: var(--text-main); font-size: 1.2rem;"><i
+                        class="fas fa-arrow-left"></i></button>
+                <h3 id="training-culture-name" style="margin: 0; color: var(--primary);">Cultural Training</h3>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 25px; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <span id="method-step-count"
+                        style="font-size: 0.8rem; font-weight: 600; color: var(--secondary);">Method 1 of 3</span>
+                    <div id="method-dots-container" style="display: flex; gap: 5px;">
+                        <!-- Dots will be injected here -->
+                    </div>
+                </div>
+                <h4 id="method-title" style="font-size: 1.2rem; margin-bottom: 15px;">Initializing Method...</h4>
+                <div id="method-visual"
+                    style="width: 100%; height: 220px; border-radius: 12px; margin-bottom: 20px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid var(--glass-border);">
+                    <i id="method-icon" class="fas fa-running"
+                        style="font-size: 4rem; opacity: 0.5; color: var(--primary); position: absolute; z-index: 1;"></i>
+                    <img id="method-ref-img" src="" alt="Reference Image"
+                        style="width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; z-index: 2;">
+                </div>
+                <p id="method-desc" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted);">Please wait
+                    while we load the training materials for this heritage art.</p>
+
+                <!-- Step-specific AR/VR Options -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                    <button onclick="launchMethodExperience('AR')" class="btn-secondary"
+                        style="font-size: 0.8rem; padding: 10px; border-radius: 8px; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.05);">
+                        <i class="fas fa-camera" style="color: #4caf50;"></i> AR View
+                    </button>
+                    <button onclick="launchMethodExperience('XR')" class="btn-secondary"
+                        style="font-size: 0.8rem; padding: 10px; border-radius: 8px; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.05);">
+                        <i class="fas fa-vr-cardboard" style="color: #2196f3;"></i> XR View
+                    </button>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button id="btn-next-method" onclick="nextMethod()" class="btn-primary"
+                    style="flex: 2; padding: 18px; font-weight: 700; border-radius: 12px;">Continue to Next
+                    Method</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div id="nav-home" class="nav-item active" onclick="switchView('home')">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </div>
+            <div id="nav-explore" class="nav-item" onclick="switchView('explore')">
+                <i class="fas fa-compass"></i>
+                <span>Explore</span>
+            </div>
+            <div id="nav-saved" class="nav-item" onclick="switchView('saved')">
+                <i class="fas fa-heart"></i>
+                <span>Saved</span>
+            </div>
+            <div id="nav-profile" class="nav-item" onclick="switchView('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+        </nav>
+
+        <!-- Toast Notification -->
+        <div id="toast"
+            style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(150px); background: var(--primary); color: white; padding: 12px 24px; border-radius: 30px; font-weight: 600; box-shadow: var(--shadow); transition: transform 0.3s; z-index: 1000;">
+            Saved Successfully!
+        </div>
+
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAf_RQx8vc-ejThWx5U-W9F5xvQwKMRV6k",
+            authDomain: "dancewebsite-a672c.firebaseapp.com",
+            projectId: "dancewebsite-a672c",
+            storageBucket: "dancewebsite-a672c.firebasestorage.app",
+            messagingSenderId: "306223842216",
+            appId: "1:306223842216:web:f7d47d407ffce1d735539d",
+            measurementId: "G-3V06DPZS6P"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('user-email').innerText = user.email;
+                const displayName = user.displayName || user.email.split('@')[0];
+                document.querySelectorAll('.profile-name-display').forEach(el => el.innerText = displayName);
+
+                const localPic = localStorage.getItem('user_avatar_' + user.uid);
+                if (localPic) {
+                    document.querySelectorAll('.profile-pic-img').forEach(el => el.src = localPic);
+                } else if (user.photoURL) {
+                    document.querySelectorAll('.profile-pic-img').forEach(el => el.src = user.photoURL);
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        window.handleLogout = function () {
+            signOut(auth).then(() => {
+                window.location.href = "index.html";
+            });
+        }
+
+        window.editProfile = async function () {
+            const user = auth.currentUser;
+            let newName = prompt("Enter your new name:", user.displayName || "");
+            if (newName) {
+                await updateProfile(user, { displayName: newName });
+                document.querySelectorAll('.profile-name-display').forEach(el => el.innerText = newName);
+            }
+        }
+
+        // --- CAMERA LOGIC ---
+        let stream = null;
+        window.triggerFileSelect = function () {
+            const modal = document.getElementById('camera-modal');
+            const video = document.getElementById('webcam-feed');
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+                    .then(function (s) {
+                        stream = s;
+                        video.srcObject = stream;
+                        modal.style.display = 'flex';
+                    })
+                    .catch(() => document.getElementById('file-input').click());
+            } else {
+                document.getElementById('file-input').click();
+            }
+        }
+
+        window.closeCamera = function () {
+            document.getElementById('camera-modal').style.display = 'none';
+            if (stream) stream.getTracks().forEach(track => track.stop());
+        }
+
+        window.takePhoto = function () {
+            const video = document.getElementById('webcam-feed');
+            const canvas = document.getElementById('camera-canvas');
+            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            const dataUrl = canvas.toDataURL('image/png');
+            document.querySelectorAll('.profile-pic-img').forEach(el => el.src = dataUrl);
+            localStorage.setItem('user_avatar_' + auth.currentUser.uid, dataUrl);
+            closeCamera();
+        }
+
+        window.handleFileSelect = function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.querySelectorAll('.profile-pic-img').forEach(el => el.src = e.target.result);
+                localStorage.setItem('user_avatar_' + auth.currentUser.uid, e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+
+    <script>
+        function switchView(viewName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
+            const viewEl = document.getElementById('view-' + viewName);
+            if (viewEl) viewEl.classList.add('view-active');
+
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const navEl = document.getElementById('nav-' + viewName);
+            if (navEl) navEl.classList.add('active');
+
+            if (viewName === 'saved') renderSaved();
+            window.location.hash = viewName;
+
+            // Scroll to top when switching views
+            window.scrollTo(0, 0);
+        }
+
+        function saveDance(name) {
+            localStorage.setItem("savedDance", name);
+            const toast = document.getElementById('toast');
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            setTimeout(() => toast.style.transform = 'translateX(-50%) translateY(150px)', 2000);
+        }
+
+        function recordActivity(name) {
+            let activity = JSON.parse(localStorage.getItem('recentActivity')) || [];
+            activity = activity.filter(item => item.name !== name);
+            activity.unshift({ name: name, time: "Just now" });
+            if (activity.length > 3) activity.pop();
+            localStorage.setItem('recentActivity', JSON.stringify(activity));
+            renderActivity();
+        }
+
+        const cultureDetailsData = {
+            "Bharatanatyam": [
+                { section: "Overview", content: "Bharatanatyam is one of the oldest and most popular classical dance forms of India, originating from the holy temples of Tamil Nadu. It is celebrated for its rhythmic footwork, intricate hand gestures, and geometric precision." },
+                { section: "History & Origin", content: "Traces back over 2,000 years to the 'Natya Shastra' by Bharata Muni. Historically evolved from 'Sadir', performed as a sacred ritual in ancient Tamil temples." },
+                { section: "Cultural Significance", content: "It is a spiritual art form that serves as a medium for 'Bhakti' (devotion) and 'Rasa' (aesthetics). It tells profound stories from Indian mythology through dance and drama." },
+                { section: "Costume & Ornaments", content: "Dancers use exquisite silk sarees with pleated fans (that open like a peacock during squats), traditional Temple Jewelry (Kempu), and audible Ghungroos (ankle bells)." },
+                { section: "Music & Instruments", content: "Performed to the rich traditions of **Carnatic Music**. The ensemble (Pakkavadhyam) includes: <br>• **Nattuvangam:** Small cymbals played by the Guru to maintain the rhythm (Tala). <br>• **Mridangam:** The double-headed drum providing the primary rhythmic beat. <br>• **Vocal:** A lead singer who narrates the story through soulful ragas. <br>• **Flute & Violin:** Melodic instruments that enhance the emotional mood (Bhava). <br>• **Veena:** Sometimes used for its ancient and divine resonance." },
+                { section: "Expressions (Abhinaya)", content: "Focuses on 'Abhinaya' (facial expressions) and 'Mudras' (hand gestures) to communicate emotions (Bhava) and narratives (Kathaka) to the audience." },
+                { section: "Performance Elements", content: "Consists of Nritta (pure rhythm), Nritya (expressive movement), and Natya (dramatic storytelling), usually starting with an Alarippu and ending with a Thillana." },
+                { section: "Styles & Banis (Varieties)", content: "Bharatanatyam has several distinct styles or 'Banis', each with unique characteristics: <br>• **Pandanallur Bani:** Known for its geometric precision, linear movements, and emphasis on deep Araimandi. <br>• **Vazhuvoor Bani:** Noted for its grace, fluid transitions, and extensive use of Abhinaya (expressions). <br>• **Kalakshetra Bani:** A modernized, structured style popularized by Rukmini Devi Arundale, emphasizing sharp, clean lines and angularity. <br>• **Melattur Bani:** Heavily influenced by the Bhagavata Mela tradition, focusing on dramatic storytelling and rhythmic complexity." },
+                { section: "Stage & Temple Connection", content: "Historically patronized in grand temples like the **Brihadisvara Temple (Tanjore)** and **Chidambaram**, where it was performed as an offering. **Example:** Dancers performed during the 'Kumbhabhishekam' and daily rituals in the temple mandapams. Later, **Rukmini Devi Arundale** played a key role in bringing it from templesteps to the modern global stage." }
+            ],
+            "Karakattam": [
+                { section: "Overview", content: "Karakattam is an ancient folk dance of Tamil Nadu performed in praise of the rain goddess Mariamman. It involves balancing a pot (Karagam) on the head while dancing." },
+                { section: "History & Origin", content: "Historically known as 'Kudakoothu', this art form has been referenced in ancient Tamil literature like 'Silappatikaram'. It was traditionally performed in temple festivals to ensure a good harvest." },
+                { section: "Music & Instruments", content: "The dance is performed to the energetic **Naiyaandi Melam** ensemble: <br>• **Nadaswaram:** The primary woodwind instrument that leads the melody. <br>• **Thavil:** A barrel-shaped percussion instrument that provides the loud, fast-paced beat. <br>• **Pambai & Thamukku:** Smaller drums that add complex rhythmic layers." },
+                { section: "Costume", content: "Dancers wear vibrant traditional attire and a brass pot decorated with floral arrangements and a wooden parrot pointing upwards." },
+                { section: "Types of Karagam", content: "There are two main varieties: <br>• **Aatta Karagam:** Performed primarily for entertainment, focusing on balance and difficult acrobatic feats. <br>• **Sakthi Karagam:** Performed strictly for religious purposes in temples, often following a period of fasting and purification." }
+            ],
+            "Silambattam": [
+                { section: "Overview", content: "Silambattam is an ancient staff-fencing martial art from Tamil Nadu. It is one of the oldest martial arts in the world, emphasizing speed, agility, and precision." },
+                { section: "History & Origin", content: "Mentioned in the 'Silappatikaram' (2nd Century AD). It originated in the Kurinji mountains and was used by ancient Tamil kings to train their warriors." },
+                { section: "Music & Instruments", content: "Demonstrations are often accompanied by traditional folk instruments to boost adrenaline: <br>• **Urumi:** A double-headed drum that creates a thunderous sound. <br>• **Thavil:** Used to provide the fast-paced rhythmic base for footwork. <br>• **Pambai:** Adds a sharp, echoing rhythm during combat sequences." },
+                { section: "Equipment", content: "The primary tool is the 'Silambam' staff, usually made from Kurunthadi bamboo. Other weapons like 'Surul Vaal' (ribbon sword) and 'Vaalkeedam' (sword and shield) are also used." },
+                { section: "Techniques", content: "Involves complex footwork patterns (Chuvadu) and rapid circular staff movements to defend against multiple attackers." },
+                { section: "Varieties of Practice", content: "Silambattam is practiced in two primary forms: <br>• **Por-Silambam (Combat):** The raw, martial aspect focused on effective self-defense and attack. <br>• **Alankara-Silambam (Performance):** Focuses on the aesthetic beauty, rhythmic spinning, and synchronized coordination for public demonstrations." }
+            ],
+            "Kavadi Attam": [
+                { section: "Overview", content: "Kavadi Attam is a religious and ceremonial dance performed by devotees during the worship of Lord Murugan, especially during festivals like Thaipusam." },
+                { section: "Concept (Kavadi)", content: "The 'Kavadi' is a decorated wooden arch with peacock feathers, representing the burden carried by the devotee as an act of penance or gratitude." },
+                { section: "Music & Instruments", content: "Devotees dance to the spiritual and high-energy **Kavadi Chindu** songs: <br>• **Urumi:** The 'talking drum' that creates deep, resonating bimbos. <br>• **Thavil:** Provides the essential rhythmic drive. <br>• **Nadaswaram:** Sometimes added for grand temple processions." },
+                { section: "Visuals & Costume", content: "Devotees often wear saffron or yellow clothes and may perform difficult balancing acts with the Kavadi on their shoulders." },
+                { section: "Varieties of Kavadi", content: "Depending on the offering, there are several types: <br>• **Pal Kavadi:** Bearing pots of milk to be offered for abhishekam. <br>• **Panneer Kavadi:** Carrying pots of rose water. <br>• **Pushpa Kavadi:** Decorated heavily with a variety of sacred flowers. <br>• **Mayil Kavadi:** Adorned with peacock feathers, representing the mount of Lord Murugan." }
+            ],
+            "Puliyattam": [
+                { section: "Overview", content: "Puliyattam (Tiger Dance) is an energetic folk dance where performers mimic the graceful and powerful movements of a tiger." },
+                { section: "Artistic Preparation", content: "Dancers paint their entire bodies with vibrant yellow and black stripes. They often wear masks or headpieces to complete the feline appearance." },
+                { section: "Music & Instruments", content: "The tiger's pouncing movements are synchronized with the **Thappu** and **Melam**: <br>• **Thappu:** A flat frame drum that gives a sharp, slapping rhythm. <br>• **Urumi:** Provides the heavy bass that mimics the roar of the tiger. <br>• **Cymbals:** Used to signal sudden changes in the tiger's stalking pattern." },
+                { section: "Context", content: "Usually performed during temple festivals and village celebrations, it captivates audiences with its raw energy and mimicry." },
+                { section: "Regional Variations", content: "While 'Puliyattam' is the core Tamil name, it shares roots with other variations like the **Huli Vesha** of Karnataka and **Puli Kali** of Kerala, each with distinct body paint patterns and rhythmic pulses." }
+            ],
+            "Therukoothu": [
+                { section: "Overview", content: "Therukoothu is an ancient form of street theater from Tamil Nadu that blends music, dance, dialogue, and drama." },
+                { section: "Narrative Themes", content: "Plays are traditionally based on Indian epics like the 'Mahabharata'. It was historically used as a medium for moral and religious education." },
+                { section: "Music & Instruments", content: "The ensemble, known as the **Koothu Mandali**, provides live backing: <br>• **Harmonium:** Provides the melodic background for the high-pitched singing. <br>• **Mridangam:** The primary percussion for the rhythmic dance sequences. <br>• **Cymbals:** Keeps the 'Tala' or rhythmic cycle intact. <br>• **Mukhavina:** A small woodwind instrument similar to a Nadaswaram." },
+                { section: "Visual Grandeur", content: "Performers wear massive, ornate headgears (Kiridams), thick padding under costumes, and heavy makeup to enhance visibility for large outdoor audiences." }
+            ],
+            "Kummi": [
+                { section: "Overview", content: "Kummi is a popular folk dance of Tamil Nadu, traditionally performed by women standing in a circle and clapping their hands." },
+                { section: "Music & Instruments", content: "Unique for its **Acapella** nature, Kummi relies on natural rhythms: <br>• **Rhythmic Clapping:** The dancers' own hands serve as the primary instrument. <br>• **Folk Songs:** Lyrics usually celebrate harvest, village life, or goddesses. <br>• **Foot Stomping:** Adds a grounding beat to the circular rotation." },
+                { section: "Cultural Significance", content: "Commonly performed during harvest festivals like 'Pongal' and other family celebrations, it symbolizes community bonding and joy." },
+                { section: "Performance Loop", content: "The lead singer starts a verse, and the group follows, moving in a circle and bending in synchronization with the claps." }
+            ],
+            "Oyillattam": [
+                { section: "Overview", content: "Oyillattam, the 'Dance of Grace', is a rhythmic and visually vibrant folk dance traditionally performed by men with colorful handkerchiefs." },
+                { section: "Performance Art", content: "Dancers stand in a single row and perform rhythmic steps while waving cloths in their hands. The sync between the row of dancers is a sight to behold." },
+                { section: "Music & Instruments", content: "Performed to the energetic beats of: <br>• **Thavil:** The heavy drum that dictates the pace of the flags/cloths being waved. <br>• **Cymbals:** Maintains the intricate rhythmic cycle (Tala). <br>• **Nadaswaram:** Often used to add a festive melodic layer." },
+                { section: "Occasions", content: "Often performed during village festivals and grand celebrations in the southern regions of Tamil Nadu." }
+            ],
+            "Bommalattam": [
+                { section: "Overview", content: "Bommalattam is the traditional art of puppetry in Tamil Nadu, combining strings and rods to bring characters to life." },
+                { section: "Music & Instruments", content: "Storytelling is enhanced by a live musical troupe: <br>• **Harmonium:** Provides the background melody for the puppet's dialogues. <br>• **Mridangam:** Sets the rhythm for the characters' movements. <br>• **Cymbals & Shakers:** Adds sound effects for different scenes (e.g., combat, rain)." },
+                { section: "The Puppets", content: "Puppets are usually made of wood, cloth, and leather. They are known for being exceptionally large and heavy compared to other Indian puppet forms." },
+                { section: "Storytelling", content: "The puppeteers stay behind a screen and use songs and dialogues to narrate mythological epics and local legends." }
+            ],
+            "Villu Paatu": [
+                { section: "Overview", content: "Villu Paatu (Bow Song) is an ancient musical storytelling tradition where a large bow serves as the primary musical instrument." },
+                { section: "Music & Instruments", content: "The heart of this performance is the **Villu (Bow)**: <br>• **Villu:** A long bow struck with sticks (Veesu-kol) to create a jangling rhythmic sound. <br>• **Kudam:** A pot placed under the string to act as a resonator. <br>• **Udukku:** A small hour-glass drum that maintains the flow. <br>• **Cymbals:** Used by the supporting singers to keep time." },
+                { section: "Narrative Style", content: "The main storyteller leads the troop in a musical dialogue, often preaching social values or narrating historical events." },
+                { section: "Types of Stories", content: "Performances are categorized into: <br>• **Mythological:** Narrating epics like the Ramayana or stories of local deities. <br>• **Social:** Narrating tales of social reformation, bravery of local heroes, or current environmental themes." }
+            ],
+            "Kolattam": [
+                { section: "Overview", content: "Kolattam is a traditional folk dance where participants strike bamboo sticks (Kalaada) together in rhythm. It is a dance of joy and community." },
+                { section: "History & Origin", content: "One of the oldest recreational dances of Tamil Nadu, mentioned in ancient literature. It is often performed during the harvest season and temple festivals." },
+                { section: "Music & Instruments", content: "The dance is performed to fast-paced folk songs, where the **rhythmic striking of sticks** provides the primary percussion, often accompanied by a Dholak or Thalam." },
+                { section: "Pinnal Kolattam", content: "A complex variety where dancers hold ropes attached to a central pole. As they dance and strike sticks, they weave the ropes into an intricate braid and then unweave it in the second half of the performance." }
+            ],
+            "Poikkal Kuthirai Attam": [
+                { section: "Overview", content: "Poikkal Kuthirai Attam (Dummy Horse Dance) features dancers wearing a horse-shaped frame around their hips, mimicking the movements of a rider." },
+                { section: "Artistic Craft", content: "The horse frame is intricately decorated with colorful paper and beads. Dancers perform on wooden stilts or heavy wooden shoes to mimic the sound of hooves." },
+                { section: "Music & Instruments", content: "Accompanied by the **Naiyaandi Melam** ensemble, featuring the Nadaswaram and Thavil, providing a high-energy backdrop for the performance." },
+                { section: "Performance Varieties", content: "While common in Tamil Nadu, this art shares characteristics with the **Kacchi Ghori** dance of Rajasthan, showing its broad cultural resonance across India." }
+            ],
+            "Mayil Aattam": [
+                { section: "Overview", content: "Mayil Aattam (Peacock Dance) is a graceful folk dance where performers dress as peacocks, using feathers and a beak to mimic the bird's movements." },
+                { section: "Cultural Context", content: "Primarily performed in Hindu temples as an offering to Lord Murugan, whose mount (vahana) is the peacock." },
+                { section: "Music & Instruments", content: "Danced to the rhythmic beats of the **Thavil** and the melodic strains of the **Nadaswaram**, capturing the elegance of the peacock." }
+            ],
+            "Devaraattam": [
+                { section: "Overview", content: "Devaraattam is a traditional celebratory dance of victory, traditionally performed by men holding colorful handkerchiefs." },
+                { section: "History", content: "Historically performed for Tamil kings returning from battle. It is characterized by bold steps and rhythmic arm swings." },
+                { section: "Music & Instruments", content: "The dance is exclusively performed to the thunderous beats of the **Urumi Melam**, a set of double-headed drums that create a powerful resonance." }
+            ],
+            "Paampu Attam": [
+                { section: "Overview", content: "Paampu Attam (Snake Dance) is a unique folk form where dancers mimic the slithering, twisting, and striking movements of a cobra." },
+                { section: "Artistic Expression", content: "Dancers wear skin-tight costumes with snake patterns and use fluid body movements to represent the serpent's grace and danger." },
+                { section: "Music & Instruments", content: "Accompanied by the **Magudi** (Pungi), the traditional wind instrument used by snake charmers, along with rhythmic drum beats." }
+            ],
+            "Paraiattam": [
+                { section: "Overview", content: "Paraiattam is a high-energy dance performed with the Parai, one of the oldest percussion instruments of the Tamil people." },
+                { section: "Symbolism", content: "The Parai drum was historically used to announce royal decrees and gather people. Today, it symbolizes resistance, celebration, and cultural pride." },
+                { section: "Music & Instruments", content: "The **Parai** drum itself is the star, creating a sharp, slapping rhythm that is often accompanied by energetic chants and athletic dance moves." },
+                { section: "Playing Varieties", content: "Performances vary from the somber **Funeral Processions** (where it serves a ritualistic purpose) to the high-energy **Temple Festivals** and **Social Awareness Rallies**, where it is a symbol of strength and resistance." }
+            ],
+
+            "Default": [
+                { section: "Overview", content: "A traditional Tamil cultural heritage form that blends movement, rhythm, and storytelling." },
+                { section: "Significance", content: "This art form represents the rich social and spiritual history of the Tamil people, passed down through generations." }
+            ]
+        };
+
+        let activeDetailCulture = "";
+
+        window.showCultureDetail = function (cultureName) {
+            console.log("Opening details for: " + cultureName);
+            activeDetailCulture = cultureName;
+            recordActivity(cultureName + " (Explored)");
+
+            const nameEl = document.getElementById('detail-culture-name');
+            const imgEl = document.getElementById('detail-culture-image');
+            const contentEl = document.getElementById('culture-detail-content');
+
+            if (!nameEl || !imgEl || !contentEl) {
+                console.error("Critical elements missing for detail view!");
+                return;
+            }
+
+            nameEl.innerText = cultureName;
+
+            // Map image
+            const imgPath = "assets/cultures/" + cultureName.toLowerCase().replace(/\s/g, "") + "/thumb.png";
+            imgEl.src = imgPath;
+            imgEl.onerror = () => { imgEl.src = "https://images.unsplash.com/photo-1583244532610-2ca270176b05?auto=format&fit=crop&q=400"; };
+
+            // Render details
+            const data = cultureDetailsData[cultureName] || cultureDetailsData["Default"];
+
+            let html = `
+                <div style="margin-top: 10px; font-family: 'Outfit', sans-serif;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-folder-open"></i> ${cultureName}
+                    </div>
+            `;
+
+            data.forEach((group, index) => {
+                html += `
+                    <div class="animate-fade-in" style="margin-bottom: 20px; animation-delay: ${index * 0.1}s;">
+                        <div style="color: var(--secondary); font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; display: flex; align-items: center;">
+                            <i class="fas fa-caret-right" style="color: var(--primary); margin-right: 10px;"></i> ${group.section}
+                        </div>
+                        <div style="margin-left: 45px; border-left: 2px solid rgba(255,255,255,0.05); padding-left: 15px;">
+                            <div class="glass-panel" style="padding: 15px; border-radius: 12px;">
+                                <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin: 0;">${group.content}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            contentEl.innerHTML = html;
+
+            switchView('culture-detail');
+        }
+
+        window.startTrainingFromDetail = function () {
+            startTraining(activeDetailCulture);
+        }
+
+        function renderActivity() {
+            let activity = JSON.parse(localStorage.getItem('recentActivity')) || [];
+            let container = document.getElementById('activity-list');
+
+
+
+            if (activity.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted); text-align: center; font-size: 0.9rem;">Start exploring to see history here!</p>';
+                return;
+            }
+
+            container.innerHTML = activity.map(item => `
+                <div class="glass-panel animate-fade-in" style="margin-bottom: 10px; padding: 15px;">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div style="background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-history" style="color: var(--secondary);"></i>
+                        </div>
+                        <div style="text-align: left;">
+                            <h4 style="margin: 0; font-size: 1rem;">${item.name}</h4>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">${item.time}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSaved() {
+            const saved = localStorage.getItem("savedDance");
+            const container = document.getElementById('saved-item-text');
+            if (saved) {
+                container.innerHTML = `<span style="color: var(--text-main); font-weight: 600;">Saved: ${saved}</span>`;
+            }
+        }
+
+
+        /* 
+           TRAINING LOGIC MOVED TO js/app-logic.js
+           - methodsData
+           - startTraining
+           - showMethod
+           - launchMethodExperience
+        */
+
+        function launchMode(name, mode) {
+            if (mode === 'XR' || mode === 'XR Immersive') {
+                connectToUnity(name, "Immersive Exploration");
+                recordActivity(name + " (XR Immersive)");
+                return;
+            }
+
+            let msg = "";
+            let category = "";
+            if (mode === 'AR') {
+                msg = "Opening AR View for " + name + "... Point your camera at a flat surface!";
+                category = " (AR View)";
+            } else if (mode === 'Step') {
+                msg = "Starting Step-by-Step Training for " + name + "... Follow the markers!";
+                category = " (Training)";
+            }
+            alert(msg);
+            recordActivity(name + category);
+        }
+
+        // --- UNITY BRIDGE LOGIC ---
+        let unityInstance = null; // This will hold the Unity instance after initialization
+
+        function connectToUnity(cultureName, methodTitle) {
+            document.getElementById('unity-culture-label').innerText = cultureName + " AR/VR: " + methodTitle;
+            document.getElementById('unity-path-hint').innerText = `/assets/cultures/${cultureName.toLowerCase().replace(/\s/g, "")}/model.glb`;
+
+            // Switch to Unity view
+            switchView('unity');
+
+            // If unity is already loaded, tell it to switch culture immediately
+            if (unityInstance) {
+                unityRequestCulture(cultureName);
+            }
+        }
+
+        // Communication TO Unity
+        function unityRequestCulture(cultureName) {
+            console.log("Sending command to Unity: Load culture -> " + cultureName);
+            if (unityInstance) {
+                // Syntax: unityInstance.SendMessage('GAMEOBJECT_NAME', 'FUNCTION_NAME', 'VALUE');
+                unityInstance.SendMessage('CultureManager', 'LoadArtForm', cultureName);
+            }
+        }
+
+        // Communication FROM Unity (Call this from Unity C# scripts using Application.ExternalCall)
+        window.onUnityLoaded = function () {
+            console.log("Unity Engine fully loaded and ready.");
+            document.getElementById('unity-loading-bar').style.display = 'none';
+            // Trigger initial load if we have a culture selected
+            const cultureToLoad = activeDetailCulture || currentTrainingCulture || "Bharatanatyam";
+            unityRequestCulture(cultureToLoad);
+        }
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            const icon = document.getElementById('theme-toggle-icon');
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                icon.className = 'fas fa-toggle-on';
+                icon.style.color = 'var(--primary)';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-toggle-off';
+                icon.style.color = 'var(--text-muted)';
+            }
+        }
+
+        let selectedCulture = "";
+
+        function openExperience(name) {
+            selectedCulture = name;
+            document.getElementById('exp-title').innerText = name;
+            document.getElementById('experience-modal').style.display = 'flex';
+        }
+
+        function closeExperience() {
+            document.getElementById('experience-modal').style.display = 'none';
+        }
+
+        function proceedExperience(mode) {
+            closeExperience();
+            if (mode === 'Info') {
+                showCultureDetail(selectedCulture);
+            } else if (mode === 'Step-by-Step' || mode === 'Training') {
+                startTraining(selectedCulture);
+                recordActivity(selectedCulture + " (Training)");
+            } else if (mode === 'AR View') {
+                alert("Opening AR Camera for " + selectedCulture + ". Please point your camera to a flat surface.");
+                recordActivity(selectedCulture + " (AR View)");
+            } else if (mode === 'XR Immersive') {
+                connectToUnity(selectedCulture, "Immersive 3D Exploration");
+                recordActivity(selectedCulture + " (XR Immersive)");
+            } else {
+                recordActivity(selectedCulture + " (" + mode + ")");
+            }
+        }
+
+        window.toggleHeaderMenu = function () {
+            const menu = document.getElementById('header-menu');
+            if (menu.style.display === 'none') {
+                menu.style.display = 'flex';
+                // Close when clicking outside
+                document.addEventListener('click', closeMenuOutside);
+            } else {
+                menu.style.display = 'none';
+                document.removeEventListener('click', closeMenuOutside);
+            }
+        }
+
+        function closeMenuOutside(event) {
+            const menu = document.getElementById('header-menu');
+            const icon = document.querySelector('.fa-ellipsis-v');
+            if (!menu.contains(event.target) && event.target !== icon) {
+                menu.style.display = 'none';
+                document.removeEventListener('click', closeMenuOutside);
+            }
+        }
+
+        const quizRounds = [
+            {
+                title: "Round 1: History & Origins",
+                questions: [
+                    { question: "Historical records show Bharatanatyam evolved from which ancient dance form?", options: ["Sadir", "Kathak", "Odissi", "Kuchipudi"], answer: 0 },
+                    { question: "Which dance is traditionally performed in honor of the rain goddess Mari Amman?", options: ["Karakattam", "Mayil Aattam", "Kummi", "Villu Paatu"], answer: 0 },
+                    { question: "Who was the legendary pioneer responsible for bringing Bharatanatyam to the global stage?", options: ["Rukmini Devi Arundale", "Padma Subrahmanyam", "Birju Maharaj", "Mallika Sarabhai"], answer: 0 },
+                    { question: "Devaraattam was historically performed to celebrate the return of whom?", options: ["Victorious Kings", "Harvest Festival", "Temple Priests", "Monsoon Rain"], answer: 0 }
+                ]
+            },
+            {
+                title: "Round 2: Rhythms & Instruments",
+                questions: [
+                    { question: "Which instrument in Villu Paatu uses a pot resonator placed under the string?", options: ["Kudam", "Thavil", "Mridangam", "Urumi"], answer: 0 },
+                    { question: "In the folk dance 'Kummi', what is the dancers' primary rhythmic instrument?", options: ["Hand Claps", "Bamboo Sticks", "Cymbals", "Ankle Bells"], answer: 0 },
+                    { question: "What is the woodwind instrument that typically leads the melody in Tamil folk ensembles?", options: ["Nadaswaram", "Flute", "Harmonium", "Shehnai"], answer: 0 },
+                    { question: "Which 'talking drum' is known for creating deep vibrations that mimic a tiger's roar?", options: ["Urumi", "Parai", "Ghatam", "Veena"], answer: 0 }
+                ]
+            },
+            {
+                title: "Round 3: Visuals & Costumes",
+                questions: [
+                    { question: "What do Poikkal Kuthirai dancers wear to create the rhythmic sound of hooves?", options: ["Wooden Stilts", "Iron Boots", "Silver Chains", "Leather Sandals"], answer: 0 },
+                    { question: "The 'Salangai' is a vital part of a dancer's attire. What is it?", options: ["Ankle Bells", "Silk Saree", "Head Crown", "Hand Rings"], answer: 0 },
+                    { question: "Which dance features performers waving colorful handkerchiefs in a graceful row?", options: ["Oyillattam", "Karakattam", "Silambattam", "Therukoothu"], answer: 0 },
+                    { question: "In Puliyattam, what vibrant colors are predominantly used for body painting?", options: ["Yellow and Black", "Red and Green", "Blue and Silver", "White and Gold"], answer: 0 }
+                ]
+            },
+            {
+                title: "Round 4: Arts & Traditions",
+                questions: [
+                    { question: "Silambattam martial arts originated in which specific mountain range?", options: ["Kurinji", "Himalayas", "Vindhyas", "Sahyadri"], answer: 0 },
+                    { question: "Which dance form focuses on mimicking the slithering and hooded poses of a cobra?", options: ["Paampu Attam", "Mayil Aattam", "Puliyattam", "Bommalattam"], answer: 0 },
+                    { question: "Bommalattam (Puppetry) traditionally uses puppets made from which material?", options: ["Wood & Leather", "Plastic & Metal", "Glass & Clay", "Paper & Thread"], answer: 0 },
+                    { question: "Kavadi Attam is most famously associated with which Tamil festival?", options: ["Thaipusam", "Pongal", "Diwali", "Karthigai Deepam"], answer: 0 }
+                ]
+            }
+        ];
+
+        let currentRoundIndex = 0;
+        let currentQuestionIndex = 0;
+        let quizScore = 0;
+
+        window.startQuiz = function () {
+            currentRoundIndex = 0;
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-intro').style.display = 'none';
+            document.getElementById('quiz-result').style.display = 'none';
+            document.getElementById('quiz-active').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const round = quizRounds[currentRoundIndex];
+            const q = round.questions[currentQuestionIndex];
+
+            document.getElementById('quiz-round-title').innerText = round.title;
+            document.getElementById('quiz-question').innerText = q.question;
+
+            const totalQuestionsInRound = round.questions.length;
+            document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIndex + 1} of ${totalQuestionsInRound} (Round ${currentRoundIndex + 1}/4)`;
+            document.getElementById('quiz-score-ui').innerText = `Score: ${quizScore}`;
+            document.getElementById('quiz-bar').style.width = ((currentQuestionIndex + 1) / totalQuestionsInRound * 100) + '%';
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-secondary';
+                btn.style.textAlign = 'left';
+                btn.style.padding = '15px';
+                btn.innerText = opt;
+                btn.onclick = () => handleQuizAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleQuizAnswer(selectedIndex) {
+            const round = quizRounds[currentRoundIndex];
+            const correctIndex = round.questions[currentQuestionIndex].answer;
+            const btns = document.getElementById('quiz-options').querySelectorAll('button');
+
+            if (selectedIndex === correctIndex) {
+                quizScore++;
+                btns[selectedIndex].style.background = 'rgba(76, 175, 80, 0.2)';
+                btns[selectedIndex].style.borderColor = '#4caf50';
+            } else {
+                btns[selectedIndex].style.background = 'rgba(244, 67, 54, 0.2)';
+                btns[selectedIndex].style.borderColor = '#f44336';
+                btns[correctIndex].style.background = 'rgba(76, 175, 80, 0.2)';
+                btns[correctIndex].style.borderColor = '#4caf50';
+            }
+
+            btns.forEach(b => b.onclick = null);
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < round.questions.length) {
+                    renderQuestion();
+                } else if (currentRoundIndex < quizRounds.length - 1) {
+                    currentRoundIndex++;
+                    currentQuestionIndex = 0;
+                    const nextRound = quizRounds[currentRoundIndex];
+                    alert(`Round Complete! Get ready for ${nextRound.title}.`);
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }, 1200);
+        }
+
+        function showQuizResult() {
+            const totalQuestions = quizRounds.reduce((acc, round) => acc + round.questions.length, 0);
+            document.getElementById('quiz-active').style.display = 'none';
+            document.getElementById('quiz-result').style.display = 'block';
+            document.getElementById('result-score-text').innerText = `Total Score: ${quizScore} out of ${totalQuestions}`;
+
+            let feedback = "";
+            const percent = (quizScore / totalQuestions) * 100;
+            if (percent === 100) feedback = "Master Class! You passed all rounds with flying colors.";
+            else if (percent >= 70) feedback = "Great job! Your knowledge of history and music is impressive.";
+            else feedback = "Nice attempt! Explore the history tree to master the music and origins.";
+
+            document.getElementById('result-feedback').innerText = feedback;
+            recordActivity("Quiz Rounds Completed (Score: " + quizScore + ")");
+        }
+
+        window.onload = function () {
+            renderActivity();
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById('view-' + hash)) switchView(hash);
+        };
+    </script>
+    <!-- Experience Selection Modal -->
+    <div id="experience-modal" class="modal-overlay" style="display: none; align-items: flex-end;">
+        <div class="glass-panel"
+            style="width: 100%; border-radius: 20px 20px 0 0; padding: 30px; animation: slideUp 0.3s ease; border-bottom: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h3 id="exp-title" style="margin: 0; color: var(--primary);">Culture Name</h3>
+                <button onclick="closeExperience()"
+                    style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem;"><i
+                        class="fas fa-times"></i></button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                <button class="btn-primary" onclick="proceedExperience('Step-by-Step')"
+                    style="padding: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; background: linear-gradient(135deg, #FF6F00, #FFB300);">
+                    <i class="fas fa-shoe-prints" style="font-size: 1.3rem;"></i>
+                    <div style="text-align: left;">
+                        <div style="font-weight: 600; font-size: 0.95rem;">Step-by-Step Training</div>
+                        <div style="font-size: 0.7rem; opacity: 0.8;">Learn specific poses & mudras</div>
+                    </div>
+                </button>
+                <button class="btn-secondary" onclick="proceedExperience('AR View')"
+                    style="padding: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%;">
+                    <i class="fas fa-camera" style="font-size: 1.3rem; color: #4caf50;"></i>
+                    <div style="text-align: left;">
+                        <div style="font-weight: 600; font-size: 0.95rem;">AR View (Camera)</div>
+                        <div style="font-size: 0.7rem; opacity: 0.8;">Bring culture into your room</div>
+                    </div>
+                </button>
+                <button class="btn-secondary" onclick="proceedExperience('XR Immersive')"
+                    style="padding: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%;">
+                    <!-- Application Logic - Java + JavaScript -->
+                    <script src="js/app-logic.js"></script>
+</body>
+
+</html>
+

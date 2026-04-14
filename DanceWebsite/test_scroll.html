@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 0; background: #eee; }
+  .app-container {
+      width: 414px;
+      height: 600px;
+      margin: 20px auto;
+      overflow-y: auto;
+      background: white;
+      position: relative;
+      border: 5px solid black;
+  }
+  .content {
+      height: 1500px;
+      background: linear-gradient(#fcc, #ccf);
+  }
+  .bottom-nav {
+      position: -webkit-sticky;
+      position: sticky;
+      bottom: 25px;
+      margin: 0 auto;
+      width: 90%;
+      height: 60px;
+      background: rgba(30, 30, 30, 0.9);
+      border-radius: 30px;
+      color: white;
+      text-align: center;
+      line-height: 60px;
+  }
+</style>
+</head>
+<body>
+  <div class='app-container' id='app'>
+    <div class='content'>Scroll me</div>
+    <div class='bottom-nav'>Bottom Nav</div>
+  </div>
+  <script>
+    document.getElementById('app').scrollTop = 100;
+  </script>
+</body>
+</html>

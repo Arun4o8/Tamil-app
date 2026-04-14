@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamil Culture Kids App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="kids-style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Header -->
+        <div class="kids-header">
+            <div class="kids-header-logo">
+                <div class="logo-icon">🎭</div>
+                <div>
+                    <span class="logo-text">XR Tamil</span>
+                    <span class="logo-sub">KIDS EDITION</span>
+                </div>
+            </div>
+            <div class="kids-header-actions">
+                <div class="xp-badge">
+                    <i class="fas fa-star"></i> <span id="xp-counter">120</span> XP
+                </div>
+                <!-- Profile picture switches to profile view -->
+                <img src="profile.png" class="header-avatar" onclick="switchView('profile')" onerror="this.src='https://ui-avatars.com/api/?name=Kid&background=FFB800&color=fff'">
+            </div>
+        </div>
+
+        <!-- 1. HOME VIEW -->
+        <div id="view-home" class="view-section view-active">
+            
+            <div class="welcome-banner">
+                <div class="welcome-text">
+                    <h2>Hello, Explorer! 👋</h2>
+                    <p>Ready for a cultural adventure today?</p>
+                </div>
+                <div class="welcome-emoji">🦁</div>
+            </div>
+
+            <h3 class="section-title"><span class="title-emoji">🌟</span> Quick Access</h3>
+            <div class="category-grid">
+                <!-- Dances -->
+                <div class="cat-card cat-saffron" onclick="switchView('explore')">
+                    <div class="cat-emoji">💃</div>
+                    <div class="cat-title">Dances</div>
+                    <div class="cat-desc">Learn steps!</div>
+                    <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+                </div>
+                <!-- Celebrations -->
+                <div class="cat-card cat-gold" onclick="switchView('celebrations')">
+                    <div class="cat-emoji">🎉</div>
+                    <div class="cat-title">Festivals</div>
+                    <div class="cat-desc">Time to celebrate!</div>
+                    <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+                </div>
+                <!-- Quiz -->
+                <div class="cat-card cat-teal cat-wide" onclick="switchView('quiz')">
+                    <div class="cat-emoji">🧠</div>
+                    <div>
+                        <div class="cat-title">Cultural Quiz</div>
+                        <div class="cat-desc">Test your knowledge & win stars! ⭐</div>
+                    </div>
+                    <div class="cat-arrow"><i class="fas fa-play"></i></div>
+                </div>
+            </div>
+
+            <h3 class="section-title"><span class="title-emoji">🔥</span> Featured Today</h3>
+            <div class="spotlight-card" onclick="showCultureDetail('Bharatanatyam')">
+                <img src="assets/cultures/bharatanatyam/thumb.png" alt="Bharatanatyam" onerror="this.src='https://images.unsplash.com/photo-1583244532610-2ca270176b05?auto=format&fit=crop&q=80'">
+                <div class="spotlight-overlay">
+                    <div class="spotlight-badge">⭐ Top Pick</div>
+                    <div class="spotlight-title">Bharatanatyam</div>
+                    <div class="spotlight-sub">The classic dance of expressions!</div>
+                </div>
+            </div>
+            
+            <!-- Rules -->
+            <div class="info-card" onclick="switchView('rules')" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="info-card-icon" style="background: rgba(0, 201, 167, 0.15); color: var(--teal);"><i class="fas fa-book"></i></div>
+                    <div style="font-weight: 700;">Rules & Guidelines</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-muted); font-size: 0.8rem;"></i>
+            </div>
+        </div>
+
+        <!-- 2. EXPLORE VIEW -->
+        <div id="view-explore" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title">Explore Dances 💃</h3>
+            </div>
+
+            <!-- Search Area -->
+            <div class="kids-search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="dance-search" placeholder="Search for a dance..." onkeyup="filterDances()">
+            </div>
+
+            <!-- Tabs -->
+            <div class="kids-tab-bar category-tabs">
+                <div class="kids-tab tab active">All Dances</div>
+                <div class="kids-tab tab">Classical</div>
+                <div class="kids-tab tab">Folk</div>
+                <div class="kids-tab tab">Martial Arts</div>
+            </div>
+
+            <!-- Dance Grid -->
+            <div class="kids-dance-grid dance-grid">
+                <!-- 1 -->
+                <div class="kids-dance-card dance-card" onclick="showCultureDetail('Bharatanatyam')">
+                    <div class="card-img-wrap">
+                        <img src="assets/cultures/bharatanatyam/thumb.png" class="dance-image" onerror="this.src='https://images.unsplash.com/photo-1583244532610-2ca270176b05?auto=format&fit=crop&q=80'">
+                        <button class="card-save-btn save-btn" onclick="event.stopPropagation(); saveDance('Bharatanatyam')"><i class="far fa-heart"></i></button>
+                    </div>
+                    <div class="card-body dance-info">
+                        <span class="card-name dance-name">Bharatanatyam</span>
+                        <span class="card-type dance-type">Classical Dance</span>
+                        <div class="difficulty-stars" style="margin-top: 4px;">
+                            <i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2 -->
+                <div class="kids-dance-card dance-card" onclick="showCultureDetail('Silambattam')">
+                    <div class="card-img-wrap">
+                        <img src="assets/cultures/silambattam/thumb.png" class="dance-image" onerror="this.src='https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&q=80'">
+                        <button class="card-save-btn save-btn" onclick="event.stopPropagation(); saveDance('Silambattam')"><i class="far fa-heart"></i></button>
+                    </div>
+                    <div class="card-body dance-info">
+                        <span class="card-name dance-name">Silambattam</span>
+                        <span class="card-type dance-type">Martial Arts</span>
+                        <div class="difficulty-stars" style="margin-top: 4px;">
+                            <i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star empty"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 3 -->
+                <div class="kids-dance-card dance-card" onclick="showCultureDetail('Karakattam')">
+                    <div class="card-img-wrap">
+                        <img src="assets/cultures/karakattam/thumb.png" class="dance-image" onerror="this.src='https://images.unsplash.com/photo-1610450942001-f2f2b467140e?auto=format&fit=crop&q=80'">
+                        <button class="card-save-btn save-btn" onclick="event.stopPropagation(); saveDance('Karakattam')"><i class="far fa-heart"></i></button>
+                    </div>
+                    <div class="card-body dance-info">
+                        <span class="card-name dance-name">Karakattam</span>
+                        <span class="card-type dance-type">Folk (Pot Balance)</span>
+                        <div class="difficulty-stars" style="margin-top: 4px;">
+                            <i class="fas fa-star star"></i><i class="fas fa-star star empty"></i><i class="fas fa-star star empty"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 4 -->
+                <div class="kids-dance-card dance-card" onclick="showCultureDetail('Puliyattam')">
+                    <div class="card-img-wrap">
+                        <img src="assets/cultures/puliyattam/thumb.png" class="dance-image" onerror="this.src='https://images.unsplash.com/photo-1547407139-3c921a66005c?auto=format&fit=crop&q=80'">
+                        <button class="card-save-btn save-btn" onclick="event.stopPropagation(); saveDance('Puliyattam')"><i class="far fa-heart"></i></button>
+                    </div>
+                    <div class="card-body dance-info">
+                        <span class="card-name dance-name">Puliyattam</span>
+                        <span class="card-type dance-type">Tiger Dance</span>
+                        <div class="difficulty-stars" style="margin-top: 4px;">
+                            <i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 5 -->
+                <div class="kids-dance-card dance-card" onclick="showCultureDetail('Kavadi Attam')">
+                    <div class="card-img-wrap">
+                        <img src="assets/cultures/kavadiattam/thumb.png" class="dance-image" onerror="this.src='https://images.unsplash.com/photo-1624443105325-15632d431015?auto=format&fit=crop&q=80'">
+                        <button class="card-save-btn save-btn" onclick="event.stopPropagation(); saveDance('Kavadi Attam')"><i class="far fa-heart"></i></button>
+                    </div>
+                    <div class="card-body dance-info">
+                        <span class="card-name dance-name">Kavadi Attam</span>
+                        <span class="card-type dance-type">Devotional</span>
+                        <div class="difficulty-stars" style="margin-top: 4px;">
+                            <i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star empty"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 6 -->
+                <div class="kids-dance-card dance-card" onclick="showCultureDetail('Therukoothu')">
+                    <div class="card-img-wrap">
+                        <img src="assets/cultures/therukoothu/thumb.png" class="dance-image" onerror="this.src='https://images.unsplash.com/photo-1514302240736-b1fee5985889?auto=format&fit=crop&q=80'">
+                        <button class="card-save-btn save-btn" onclick="event.stopPropagation(); saveDance('Therukoothu')"><i class="far fa-heart"></i></button>
+                    </div>
+                    <div class="card-body dance-info">
+                        <span class="card-name dance-name">Therukoothu</span>
+                        <span class="card-type dance-type">Street Theater</span>
+                        <div class="difficulty-stars" style="margin-top: 4px;">
+                            <i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more as needed, the grid handles it, logic handles it based on list in js -->
+            </div>
+        </div>
+
+        <!-- 3. CELEBRATIONS VIEW -->
+        <div id="view-celebrations" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title">Festivals 🎉</h3>
+            </div>
+            
+            <div class="kids-celeb-grid" id="celebrations-grid-page">
+                <div class="celeb-card" onclick="showCultureDetail('Bhogi')">
+                    <img src="assets/cultures/bhogi/thumb.png" onerror="this.src='https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&q=80'">
+                    <div class="celeb-overlay">
+                        <span class="celeb-name dance-name">Bhogi</span>
+                        <span class="celeb-type dance-type">Winter Solstice</span>
+                    </div>
+                </div>
+                <div class="celeb-card" onclick="showCultureDetail('Thaipongal')">
+                    <img src="assets/cultures/thaipongal/thumb.png" onerror="this.src='https://images.unsplash.com/photo-1611075373801-7ee69fa90069?auto=format&fit=crop&q=80'">
+                    <div class="celeb-overlay">
+                        <span class="celeb-name dance-name">Thaipongal</span>
+                        <span class="celeb-type dance-type">Harvest Festival</span>
+                    </div>
+                </div>
+                <div class="celeb-card" onclick="showCultureDetail('Mattu Pongal')">
+                    <img src="assets/cultures/mattupongal/thumb.png" onerror="this.src='https://images.unsplash.com/photo-1545622783-6f4bbbc141aa?auto=format&fit=crop&q=80'">
+                    <div class="celeb-overlay">
+                        <span class="celeb-name dance-name">Mattu Pongal</span>
+                        <span class="celeb-type dance-type">Cattle Thanksgiving</span>
+                    </div>
+                </div>
+                <div class="celeb-card" onclick="showCultureDetail('Deepavali')">
+                    <img src="assets/cultures/deepavali/thumb.png" onerror="this.src='https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&q=80'">
+                    <div class="celeb-overlay">
+                        <span class="celeb-name dance-name">Deepavali</span>
+                        <span class="celeb-type dance-type">Festival of Lights</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. QUIZ VIEW -->
+        <div id="view-quiz" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title">Quiz Game 🧠</h3>
+            </div>
+
+            <div id="quiz-container">
+                <!-- Intro -->
+                <div id="quiz-intro" class="glass-panel" style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 4rem; animation: kBounce 2s infinite;">🏆</div>
+                    <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 15px 0;">Cultural Challenge!</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Win stars by answering fun questions about Tamil heritage!</p>
+                    <button class="btn-kids-primary" onclick="startQuiz()">Play Now!</button>
+                </div>
+
+                <!-- Active Quiz -->
+                <div id="quiz-active" style="display: none;">
+                    <div class="quiz-question-box">
+                        <div class="quiz-progress-stars" id="quiz-star-tracker">
+                            <!-- Stars filled via JS -->
+                        </div>
+                        <span class="quiz-round-label" id="quiz-round-title">Question 1</span>
+                        <h4 class="quiz-question-text" id="quiz-question">...</h4>
+                    </div>
+
+                    <div class="quiz-options-grid" id="quiz-options">
+                        <!-- Options filled via JS -->
+                    </div>
+                </div>
+
+                <!-- Result -->
+                <div id="quiz-result" class="quiz-result-card" style="display: none;">
+                    <div style="font-size: 4rem; filter: drop-shadow(0 4px 10px rgba(255,184,0,0.5)); margin-bottom: 10px;">👑</div>
+                    <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--gold);">You did it!</h2>
+                    
+                    <div class="quiz-result-stars-row" id="result-star-row">
+                        <!-- Stars filled via JS -->
+                    </div>
+
+                    <p id="result-score-text" style="font-size: 1rem; font-weight: 700; margin-bottom: 6px;">Score: X / Y</p>
+                    <p id="result-feedback" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 24px;">Awesome job, Little Explorer!</p>
+                    
+                    <button class="btn-kids-primary" onclick="startQuiz()" style="margin-bottom: 10px;">Play Again ↻</button>
+                    <button class="btn-kids-secondary" onclick="switchView('home')">Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. SAVED VIEW -->
+        <div id="view-saved" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title">My Favorites ❤️</h3>
+            </div>
+            
+            <div id="saved-list-container">
+                <div class="empty-state glass-panel">
+                    <div class="empty-emoji">👀</div>
+                    <h3>Nothing here yet!</h3>
+                    <p>Go explore and save some dances you like!</p>
+                    <button class="btn-kids-primary" onclick="switchView('explore')">Explore Now →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. PROFILE VIEW -->
+        <div id="view-profile" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title">My Profile 👦👧</h3>
+            </div>
+
+            <div class="profile-hero">
+                <div class="profile-avatar-wrap" onclick="triggerFileSelect()">
+                    <img src="profile.png" class="profile-pic-img" onerror="this.src='https://ui-avatars.com/api/?name=Kid&background=FFB800&color=fff'">
+                    <div class="cam-badge"><i class="fas fa-camera"></i></div>
+                </div>
+                <h2 class="profile-name profile-name-display">Student</h2>
+                <p class="profile-email" id="user-email">Explorer Level 1</p>
+
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="stat-val">12</span>
+                        <span class="stat-lbl">Dances</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-val" style="color: var(--gold);">⭐</span>
+                        <span class="stat-lbl">Badges</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-val" style="color: var(--teal);">5</span>
+                        <span class="stat-lbl">Days</span>
+                    </div>
+                </div>
+                
+                <button class="btn-kids-secondary" onclick="editProfile()" style="margin-top: 20px; font-size: 0.85rem; padding: 10px;">Edit My Name</button>
+            </div>
+
+            <!-- Settings Links -->
+            <div class="profile-menu-item" onclick="switchView('language')">
+                <div class="menu-left">
+                    <div class="menu-icon" style="background: rgba(0,201,167,0.15); color: var(--teal);"><i class="fas fa-language"></i></div>
+                    <div>
+                        <div class="menu-label">App Language</div>
+                        <div class="menu-desc">English, Tamil</div>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-muted); font-size: 0.8rem;"></i>
+            </div>
+
+            <div class="profile-menu-item" onclick="switchView('about')">
+                <div class="menu-left">
+                    <div class="menu-icon" style="background: rgba(255,184,0,0.15); color: var(--gold);"><i class="fas fa-info-circle"></i></div>
+                    <div>
+                        <div class="menu-label">About Us</div>
+                        <div class="menu-desc">Created by e16 ai</div>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-muted); font-size: 0.8rem;"></i>
+            </div>
+
+            <div class="profile-menu-item danger" onclick="handleLogout()">
+                <div class="menu-left">
+                    <div class="menu-icon" style="background: rgba(255,71,87,0.1); color: var(--red);"><i class="fas fa-sign-out-alt"></i></div>
+                    <div class="menu-label">Log Out</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. CULTURE DETAIL VIEW -->
+        <div id="view-culture-detail" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('explore')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title" id="detail-culture-name">Culture</h3>
+            </div>
+
+            <div class="detail-hero" id="detail-image-container">
+                <img id="detail-culture-image" src="" alt="">
+            </div>
+
+            <!-- Description Container (Injected by JS) -->
+            <div id="culture-detail-content" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-soft); margin-bottom: 24px;"></div>
+
+            <h4 style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 12px;">🌟 How to Learn?</h4>
+            
+            <button id="detail-start-training-btn" onclick="startTrainingFromDetail()" class="detail-action-btn primary-btn">
+                <span><i class="fas fa-shoe-prints" style="margin-right: 8px;"></i> Step-by-Step Training</span>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button onclick="launchXRFromDetail('AR')" class="detail-action-btn secondary-btn">
+                <span><i class="fas fa-camera" style="margin-right: 8px; color: var(--teal);"></i> Magic AR View</span>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button onclick="launchXRFromDetail('XR')" class="detail-action-btn secondary-btn">
+                <span><i class="fas fa-vr-cardboard" style="margin-right: 8px; color: var(--gold);"></i> 3D World (VR)</span>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- 8. TRAINING VIEW -->
+        <div id="view-training" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('culture-detail')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title" id="training-culture-name">Training</h3>
+            </div>
+
+            <div class="training-card">
+                <div class="training-visual" id="method-visual">
+                    <i id="method-icon" class="fas fa-star icon-placeholder"></i>
+                    <img id="method-ref-img" src="" style="display: none;">
+                </div>
+                
+                <div class="training-card-body">
+                    <div class="step-indicator">
+                        <div class="step-badge" id="method-step-count">Step 1</div>
+                        <div class="step-dots" id="method-dots-container"></div>
+                    </div>
+                    
+                    <h3 id="method-title" style="font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 8px;">Loading...</h3>
+                    <p id="method-desc" style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">Wait a moment!</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button onclick="launchMethodExperience('AR')" class="btn-kids-secondary" style="padding: 12px; font-size: 0.85rem;"><i class="fas fa-camera" style="color: var(--teal); margin-right:5px;"></i> AR Lens</button>
+                        <button onclick="launchMethodExperience('XR')" class="btn-kids-secondary" style="padding: 12px; font-size: 0.85rem;"><i class="fas fa-vr-cardboard" style="color: var(--gold); margin-right:5px;"></i> 3D Model</button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="btn-next-method" onclick="nextMethod()" class="btn-kids-primary">Next Step <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <!-- IMMERSIVE & UNITY VIEWS (kept minimally styled for fullscreen interaction) -->
+        <div id="view-immersive" class="view-section" style="padding: 0; background: #000; height: 100vh; position: fixed; top: 0; left: 0; width: 100%; z-index: 2000; display: none;">
+            <div style="position: absolute; top: 20px; left: 20px; z-index: 2010;">
+                <button onclick="switchView('home')" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 20px; border-radius: 30px; backdrop-filter: blur(10px); cursor: pointer; font-family:var(--font-heading); font-weight:700;"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+            <div id="immersive-3d-container" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; background-image: url('cover.png'); background-size: cover; background-position: center;">
+                <div style="background: rgba(0,0,0,0.8); padding: 40px; border-radius: 20px; backdrop-filter: blur(8px); margin: 20px;">
+                    <h2 id="immersive-title" style="font-size: 2rem; margin-bottom: 20px; font-family:var(--font-heading); color:var(--gold);">3D Experience</h2>
+                    <div style="width: 80px; height: 80px; border: 5px solid var(--saffron); border-top: 5px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 30px auto;"></div>
+                    <p>Loading your magical 3D world...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-unity" class="view-section" style="padding: 0; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; background: #000; display: none;">
+            <div style="position: absolute; top: 20px; left: 20px; z-index: 2001; display: flex; align-items: center; gap: 15px;">
+                <button onclick="switchView('home')" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;"><i class="fas fa-arrow-left"></i></button>
+                <h4 id="unity-culture-label" style="color: white; margin: 0; font-weight: 700; font-family:var(--font-heading);">AR/VR View</h4>
+            </div>
+            <div id="unity-container" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                <div id="unity-loading-bar" style="width: 250px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden; margin-bottom: 20px;">
+                    <div id="unity-progress" style="width: 30%; height: 100%; background: var(--grad-main); transition: width 0.3s ease;"></div>
+                </div>
+                <p style="color: white; font-weight: 600;">Connecting to Magic World...</p>
+            </div>
+        </div>
+
+        <!-- UTILITY VIEWS: RULES, ABOUT, LANGUAGE -->
+        <div id="view-rules" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title">Guidelines 📜</h3>
+            </div>
+            
+            <div class="rule-card">
+                <div class="rule-card-header" style="color: var(--teal);"><i class="fas fa-child"></i> Get Ready</div>
+                <ul>
+                    <li>Stretch and warm up before dancing!</li>
+                    <li>Follow the steps 1, 2, 3 in order.</li>
+                    <li>Watch perfectly before trying.</li>
+                </ul>
+            </div>
+            <div class="rule-card">
+                <div class="rule-card-header" style="color: var(--gold);"><i class="fas fa-shield-alt"></i> Safety First</div>
+                <ul>
+                    <li>Keep your back straight!</li>
+                    <li>Always practice in open space.</li>
+                    <li>Drink water often! 💧</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="view-about" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('profile')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title">About Us ℹ️</h3>
+            </div>
+            <div class="about-card">
+                <div align="center" style="font-size:3rem; margin-bottom:10px;">🌟</div>
+                <h3 style="text-align: center; font-family: var(--font-heading); margin-bottom: 20px;">XR Tamil Kids Edition</h3>
+                <div class="about-row"><span class="row-label">Created By</span><span class="row-val">e16 ai</span></div>
+                <div class="about-row"><span class="row-label">Mentor</span><span class="row-val">Dharaneesh AM</span></div>
+                <div class="about-row"><span class="row-label">Devs</span><span class="row-val">Deepak.P & Arun.P</span></div>
+            </div>
+        </div>
+
+        <div id="view-language" class="view-section">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('profile')"><i class="fas fa-arrow-left"></i></button>
+                <h3 class="page-title">Language 🗣️</h3>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Choose your adventure language!</p>
+            <div class="lang-grid">
+                <div class="lang-card active" onclick="window.changeLanguage('en'); document.querySelectorAll('.lang-card').forEach(c=>c.classList.remove('active')); this.classList.add('active');">
+                    <span class="lang-flag">🇬🇧</span>
+                    <div class="lang-name">English</div>
+                    <div class="lang-native">Hello!</div>
+                </div>
+                <div class="lang-card" onclick="window.changeLanguage('ta'); document.querySelectorAll('.lang-card').forEach(c=>c.classList.remove('active')); this.classList.add('active');">
+                    <span class="lang-flag">🇮🇳</span>
+                    <div class="lang-name">Tamil</div>
+                    <div class="lang-native">வணக்கம்!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The rest of the necessary app-logic placeholders, camera modals, and toasts -->
+        <!-- Toast Notification -->
+        <div id="toast" style="position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(150px); background: #2ED573; color: #003A18; padding: 14px 28px; border-radius: 50px; font-weight: 800; font-family: var(--font-body); box-shadow: 0 4px 20px rgba(46,213,115,0.4); border: 2px solid #55E48F; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-check-circle"></i> Saved!
+        </div>
+
+        <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+        
+        <!-- Bottom Nav -->
+        <div class="kids-bottom-nav">
+            <div id="nav-home" class="kids-nav-item active" onclick="switchView('home')">
+                <div class="nav-icon-wrap"><i class="fas fa-home"></i></div>
+                <span>HOME</span>
+            </div>
+            <div id="nav-explore" class="kids-nav-item" onclick="switchView('explore')">
+                <div class="nav-icon-wrap"><i class="fas fa-compass"></i></div>
+                <span>EXPLORE</span>
+            </div>
+            <div id="nav-saved" class="kids-nav-item" onclick="switchView('saved')">
+                <div class="nav-icon-wrap"><i class="fas fa-star"></i></div>
+                <span>FAVS</span>
+            </div>
+            <div id="nav-profile" class="kids-nav-item" onclick="switchView('profile')">
+                <div class="nav-icon-wrap"><i class="fas fa-user-circle"></i></div>
+                <span>PROFILE</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <!-- Mock some HTML for unity & coloring features just in case app-logic queries it -->
+    <div id="view-coloring" style="display:none;"></div>
+    
+
+    <script src="js/translations.js"></script>
+    <script src="js/app-logic.js"></script>
+    
+    <!-- Override app-logic quiz rendering for Kids UI -->
+    <script>
+        // Custom Hook to inject our animated stars for quiz
+        const originalLoadQuestion = window.loadQuestion;
+        if(typeof window.loadQuestion === 'function') {
+            window.loadQuestion = function() {
+                originalLoadQuestion();
+                
+                // Then let's modify the stars UI based on currentQuestionIndex
+                const idx = window.currentQuestionIndex || 0;
+                const total = window.quizData ? window.quizData.length : 8;
+                
+                let starsHtml = '';
+                for(let i=0; i<total; i++) {
+                    let c = i < idx ? 'done' : '';
+                    starsHtml += `<i class="fas fa-star q-star ${c}"></i>`;
+                }
+                
+                const starTracker = document.getElementById('quiz-star-tracker');
+                if(starTracker) starTracker.innerHTML = starsHtml;
+            };
+        }
+
+        // Custom Hook to inject confetti and result UI
+        const originalEndQuiz = window.endQuiz;
+        if(typeof window.endQuiz === 'function') {
+            window.endQuiz = function() {
+                originalEndQuiz();
+                
+                // Inject result stars
+                const score = window.quizScore || 0;
+                let ratingHtml = '';
+                for(let i=0; i<3; i++) {
+                    if (score > (i * 2)) ratingHtml += '<span style="color:var(--gold);">⭐</span>';
+                    else ratingHtml += '<span style="filter:grayscale(1) opacity(0.3)">⭐</span>';
+                }
+                const resRow = document.getElementById('result-star-row');
+                if(resRow) resRow.innerHTML = ratingHtml;
+                
+                // Explode Confetti
+                for(let i=0; i<50; i++) {
+                    const c = document.createElement('div');
+                    c.className = 'confetti-piece';
+                    c.style.left = Math.random() * 100 + 'vw';
+                    c.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    c.style.animationDelay = Math.random() * 2 + 's';
+                    c.style.backgroundColor = ['#FF6B2B', '#FFB800', '#00C9A7', '#7C5CBF', '#FF4757'][Math.floor(Math.random() * 5)];
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 6000);
+                }
+            };
+        }
+        
+        // Navigation visual toggle for Kids Bottom Nav
+        // Overrides the class assignment in app-logic slightly for the new nav structure
+        document.addEventListener('DOMContentLoaded', () => {
+             // Overwrite updateNav UI for our kids UI if we really need to, but switchView does most of it
+             const oldSwitchView = window.switchView;
+             if(oldSwitchView) {
+                 window.switchView = function(viewId) {
+                     oldSwitchView(viewId);
+                     
+                     // Custom kids bottom nav updater
+                     document.querySelectorAll('.kids-nav-item').forEach(nav => {
+                         nav.classList.remove('active');
+                     });
+                     
+                     let map = {
+                         'home': 'nav-home',
+                         'explore': 'nav-explore',
+                         'saved': 'nav-saved',
+                         'profile': 'nav-profile'
+                     };
+                     
+                     if (map[viewId]) {
+                         const n = document.getElementById(map[viewId]);
+                         if(n) n.classList.add('active');
+                     }
+                 };
+             }
+        });
+    </script>
+</body>
+</html>

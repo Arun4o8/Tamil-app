@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join the Fun! — Tamil Culture Kids</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="kids-style.css">
+
+  <style>
+    body {
+      background: radial-gradient(ellipse at top, #1C0A40 0%, #0D0D1A 60%, #0A1A30 100%);
+      min-height: 100vh;
+      justify-content: center;
+    }
+
+    .login-wrap {
+      width: 100%;
+      max-width: 414px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+    }
+
+    .back-circle {
+      width: 40px; height: 40px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: #D0D4F0; font-size: 1rem; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .back-circle:hover { background: rgba(255,107,43,0.15); border-color: rgba(255,107,43,0.4); }
+
+    .login-mascot {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-mascot .mascot-emoji {
+      font-size: 5rem;
+      display: block;
+      animation: kLoginFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 6px 18px rgba(255,107,43,0.4));
+    }
+
+    @keyframes kLoginFloat {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50%       { transform: translateY(-10px) rotate(5deg); }
+    }
+
+    .login-mascot h1 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-top: 12px;
+      line-height: 1.2;
+    }
+
+    .login-mascot h1 .g1 {
+      background: linear-gradient(90deg, #FF6B2B, #FFB800);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .login-mascot p {
+      font-size: 0.9rem;
+      color: #A0A8CC;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    /* Tab Toggle */
+    .login-tabs {
+      display: flex;
+      background: rgba(255,255,255,0.04);
+      border-radius: 14px;
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+
+    .login-tab {
+      flex: 1;
+      padding: 11px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      color: #60688A;
+    }
+
+    .login-tab.active {
+      background: linear-gradient(135deg, #FF6B2B, #FF8C55);
+      color: white;
+      box-shadow: 0 4px 18px rgba(255,107,43,0.4);
+    }
+
+    /* Input Group */
+    .kids-input-group {
+      margin-bottom: 16px;
+    }
+
+    .kids-input-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #A0A8CC;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .kids-input {
+      width: 100%;
+      padding: 15px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      color: white;
+      font-size: 0.95rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .kids-input:focus {
+      border-color: rgba(255,107,43,0.6);
+      background: rgba(255,107,43,0.05);
+    }
+
+    .kids-input::placeholder {
+      color: rgba(160,168,204,0.5);
+      font-weight: 400;
+    }
+
+    /* Error / Success */
+    .kids-error {
+      display: none;
+      background: rgba(255,71,87,0.12);
+      border: 1px solid rgba(255,71,87,0.3);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #FF4757;
+      margin-bottom: 16px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kids-success {
+      display: none;
+      background: rgba(46,213,115,0.12);
+      border: 1px solid rgba(46,213,115,0.3);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #2ED573;
+      margin-bottom: 16px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .login-main-btn {
+      width: 100%;
+      padding: 18px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #FF6B2B, #FF8C55);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 28px rgba(255,107,43,0.45);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: 6px;
+    }
+
+    .login-main-btn:hover  { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,107,43,0.55); }
+    .login-main-btn:active { transform: scale(0.97); }
+    .login-main-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .login-divider .line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .login-divider span {
+      font-size: 0.75rem;
+      color: #60688A;
+      font-weight: 700;
+    }
+
+    .skip-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      color: #A0A8CC;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .skip-btn:hover {
+      border-color: rgba(0,201,167,0.4);
+      color: #00C9A7;
+      background: rgba(0,201,167,0.06);
+    }
+
+    .safe-note {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #60688A;
+      margin-top: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .safe-note i { color: #2ED573; }
+
+    /* Fun floating emojis in bg */
+    .float-emoji {
+      position: fixed;
+      font-size: 1.5rem;
+      opacity: 0.06;
+      pointer-events: none;
+      animation: kLoginBg linear infinite;
+    }
+
+    @keyframes kLoginBg {
+      0%   { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-30px) rotate(15deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Floating BG Emojis -->
+  <span class="float-emoji" style="top:5%; left:10%; animation-duration:8s;">💃</span>
+  <span class="float-emoji" style="top:20%; right:8%; animation-duration:6s;">🎭</span>
+  <span class="float-emoji" style="bottom:30%; left:5%; animation-duration:10s;">🌺</span>
+  <span class="float-emoji" style="bottom:10%; right:12%; animation-duration:7s;">⭐</span>
+
+  <div class="login-wrap">
+    <!-- Header -->
+    <div class="login-header">
+      <button class="back-circle" onclick="window.location.href='kids-index.html'">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <span style="font-size:0.78rem; color:#60688A; font-weight:700;">SAFE & SECURE 🔒</span>
+    </div>
+
+    <!-- Mascot -->
+    <div class="login-mascot">
+      <span class="mascot-emoji">🎭</span>
+      <h1>Welcome, <span class="g1">Little Explorer!</span></h1>
+      <p>Sign in to save your progress and earn stars ⭐</p>
+    </div>
+
+    <!-- Tab Toggle -->
+    <div class="login-tabs">
+      <div class="login-tab active" id="tab-login" onclick="toggleMode('login')">🔑 Log In</div>
+      <div class="login-tab" id="tab-signup" onclick="toggleMode('signup')">🆕 Sign Up</div>
+    </div>
+
+    <!-- Error/Success -->
+    <div class="kids-error" id="error-msg">
+      <i class="fas fa-exclamation-circle"></i>
+      <span id="err-text">Wrong username or password!</span>
+    </div>
+    <div class="kids-success" id="success-msg">
+      <i class="fas fa-check-circle"></i>
+      <span>Account created! You're in! 🎉</span>
+    </div>
+
+    <!-- Inputs -->
+    <div class="kids-input-group">
+      <label class="kids-input-label">
+        <span>📧</span> Username or Email
+      </label>
+      <input type="text" id="user" class="kids-input" placeholder="e.g. student123 or email@gmail.com">
+    </div>
+
+    <div class="kids-input-group">
+      <label class="kids-input-label">
+        <span>🔐</span> Password
+      </label>
+      <input type="password" id="pass" class="kids-input" placeholder="At least 6 characters">
+    </div>
+
+    <!-- Main Button -->
+    <button class="login-main-btn" id="action-btn" onclick="handleAuth()">
+      🚀 Log In to Learn!
+    </button>
+
+    <!-- Divider -->
+    <div class="login-divider">
+      <div class="line"></div>
+      <span>OR</span>
+      <div class="line"></div>
+    </div>
+
+    <!-- Skip -->
+    <button class="skip-btn" onclick="window.location.href='kids-viewer.html'">
+      Continue Without Login →
+    </button>
+
+    <p class="safe-note">
+      <i class="fas fa-shield-alt"></i> 100% Safe · No personal info shared · Kid Friendly
+    </p>
+  </div>
+
+  <script src="js/app-logic.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAf_RQx8vc-ejThWx5U-W9F5xvQwKMRV6k",
+      authDomain: "dancewebsite-a672c.firebaseapp.com",
+      projectId: "dancewebsite-a672c",
+      storageBucket: "dancewebsite-a672c.firebasestorage.app",
+      messagingSenderId: "306223842216",
+      appId: "1:306223842216:web:f7d47d407ffce1d735539d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.handleAuth = function () {
+      var u = document.getElementById("user").value.trim();
+      var p = document.getElementById("pass").value.trim();
+      var err = document.getElementById("error-msg");
+      var errText = document.getElementById("err-text");
+      var success = document.getElementById("success-msg");
+      var btn = document.getElementById("action-btn");
+
+      err.style.display = "none";
+      success.style.display = "none";
+
+      if (!u || !p) {
+        errText.innerText = "Please fill in both fields! 😊";
+        err.style.display = "flex"; return;
+      }
+
+      // Admin shortcut
+      if (u === "admin" && p === "1234") {
+        window.location.href = "kids-viewer.html"; return;
+      }
+
+      let email = u.includes("@") ? u : u + "@dance.com";
+
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Please wait...';
+      btn.disabled = true;
+
+      if (window.currentMode === 'signup') {
+        createUserWithEmailAndPassword(auth, email, p)
+          .then(() => {
+            success.style.display = "flex";
+            btn.innerHTML = '✅ Account Created!';
+            setTimeout(() => { window.location.href = "kids-viewer.html"; }, 1200);
+          })
+          .catch((error) => {
+            btn.disabled = false;
+            btn.innerHTML = '🆕 Create My Account!';
+            let msg = "❌ Error signing up";
+            if (error.code === 'auth/email-already-in-use') msg = "⚠️ This name is already taken!";
+            if (error.code === 'auth/weak-password') msg = "⚠️ Password needs 6+ characters";
+            errText.innerText = msg; err.style.display = "flex";
+          });
+      } else {
+        signInWithEmailAndPassword(auth, email, p)
+          .then(() => { window.location.href = "kids-viewer.html"; })
+          .catch((error) => {
+            btn.disabled = false;
+            btn.innerHTML = '🚀 Log In to Learn!';
+            let msg = "❌ Wrong username or password!";
+            if (error.code === 'auth/invalid-credential') msg = "🔒 Wrong name or password — try again!";
+            errText.innerText = msg; err.style.display = "flex";
+          });
+      }
+    };
+
+    window.currentMode = 'login';
+    window.toggleMode = function (mode) {
+      window.currentMode = mode;
+      var tL = document.getElementById('tab-login');
+      var tS = document.getElementById('tab-signup');
+      var btn = document.getElementById('action-btn');
+      document.getElementById('error-msg').style.display = 'none';
+      document.getElementById('success-msg').style.display = 'none';
+
+      if (mode === 'login') {
+        tL.classList.add('active'); tS.classList.remove('active');
+        btn.innerHTML = '🚀 Log In to Learn!';
+      } else {
+        tS.classList.add('active'); tL.classList.remove('active');
+        btn.innerHTML = '🆕 Create My Account!';
+      }
+    };
+
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') window.handleAuth();
+    });
+
+    document.getElementById('user').addEventListener('input', () => {
+      document.getElementById('error-msg').style.display = 'none';
+    });
+    document.getElementById('pass').addEventListener('input', () => {
+      document.getElementById('error-msg').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         children: [
           // Background Image (Clean landscape)
           Image.asset(
-            'assets/splash_bg.png',
+            'assets/splash_bg.jpg',
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) =>
                 Container(color: KidsColors.backgroundDark),

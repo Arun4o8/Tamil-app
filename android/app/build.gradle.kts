@@ -37,6 +37,14 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    // CRITICAL FIX: Filament (the 3D engine used by ar_flutter_plugin_2) reads
+    // GLB/GLTF files using native memory mapping. Android by default ZIP-compresses
+    // all assets, which breaks Filament's direct file access → model silently fails.
+    // noCompress tells aapt to store these files uncompressed so Filament can read them.
+    aaptOptions {
+        noCompress += listOf("glb", "gltf", "bin", "ktx")
+    }
 }
 
 flutter {

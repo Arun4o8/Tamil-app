@@ -46,7 +46,7 @@ const List<CultureItem> allCultures = [
     emoji: '💃',
     category: 'Classical',
     assetFolder: 'bharatanatyam',
-    imagePath: 'assets/images/dances/bharatanatyam.png',
+    imagePath: 'assets/images/dances/bharatanatyam.jpg',
     color: Color(0xFFE91E63),
     description:
         'Bharatanatyam is a major form of Indian classical dance that originated in Tamil Nadu. It is one of the oldest classical dance traditions in India and is known for its fixed upper torso, bent legs, and knees flexed (Araimandi) combined with spectacular footwork and a sophisticated vocabulary of sign language based on gestures of hands, eyes, and face muscles.',
@@ -61,7 +61,7 @@ const List<CultureItem> allCultures = [
     emoji: '🏺',
     category: 'Folk',
     assetFolder: 'karakattam',
-    imagePath: 'assets/images/dances/karakattam.png',
+    imagePath: 'assets/images/dances/karakattam.jpg',
     color: Color(0xFF009688),
     description:
         'Karakattam is an ancient folk dance of Tamil Nadu performed in praise of the rain goddess Mariamman. The performers balance a pot (Karakam) on their head. Traditionally, this dance is categorized into two types: Sakthi Karakam, performed in temples as a spiritual offering, and Aatta Karakam, performed for entertainment.',
@@ -76,7 +76,7 @@ const List<CultureItem> allCultures = [
     emoji: '⚔️',
     category: 'Martial Arts',
     assetFolder: 'silambattam',
-    imagePath: 'assets/images/dances/silambattam.png',
+    imagePath: 'assets/images/dances/silambattam.jpg',
     color: Color(0xFFFF5722),
     description:
         'Silambattam is a weapon-based Indian martial art originating from Tamil Nadu. It is one of the oldest martial arts in the world. The name refers to the sound of the bamboo staff which is the primary weapon used. It involves complex footwork, spins, and rhythmic strikes.',
@@ -91,7 +91,7 @@ const List<CultureItem> allCultures = [
     emoji: '🕉️',
     category: 'Folk',
     assetFolder: 'kavadiattam',
-    imagePath: 'assets/images/dances/kavadi_attam.png',
+    imagePath: 'assets/images/dances/kavadi_attam.jpg',
     color: Color(0xFF673AB7),
     description:
         'Kavadi Attam is a ceremonial sacrifice and offering practiced by devotees during the worship of Lord Murugan. It involves carrying a "Kavadi" (a semi-circular decorated canopy) on the shoulders, often accompanied by rhythmic singing known as Kavadi Chindu.',
@@ -106,7 +106,7 @@ const List<CultureItem> allCultures = [
     emoji: '🐯',
     category: 'Folk',
     assetFolder: 'puliyattam',
-    imagePath: 'assets/images/dances/puliyattam.png',
+    imagePath: 'assets/images/dances/puliyattam.jpg',
     color: Color(0xFFFFA000),
     description:
         'Puliyattam (Tiger Dance) is a folk dance performed in Tamil Nadu during festivals. Performers paint their bodies with yellow and black stripes to look like tigers and wear masks. The dance mimics the stealthy movements and pounces of a tiger to the beat of heavy drums.',
@@ -121,7 +121,7 @@ const List<CultureItem> allCultures = [
     emoji: '🎭',
     category: 'Folk',
     assetFolder: 'therukoothu',
-    imagePath: 'assets/images/dances/therukoothu.png',
+    imagePath: 'assets/images/dances/therukoothu.jpg',
     color: Color(0xFF1976D2),
     description:
         'Therukoothu is an ancient form of street theater performed in the villages of Tamil Nadu. It usually depicts epic stories from the Mahabharata and Ramayana. It combines song, music, dance, and drama with elaborate costumes and heavy makeup.',
@@ -136,7 +136,7 @@ const List<CultureItem> allCultures = [
     emoji: '👏',
     category: 'Folk',
     assetFolder: 'kummi',
-    imagePath: 'assets/images/dances/kummi.png',
+    imagePath: 'assets/images/dances/kummi.jpg',
     color: Color(0xFF388E3C),
     description:
         'Kummi is one of the most important and ancient forms of village dances of Tamil Nadu. It originated when there were no musical instruments, with the participants providing the rhythm by clapping their hands. It is usually performed by women in a circle.',
@@ -151,7 +151,7 @@ const List<CultureItem> allCultures = [
     emoji: '🧣',
     category: 'Folk',
     assetFolder: 'oyillattam',
-    imagePath: 'assets/images/dances/oyillattam.png',
+    imagePath: 'assets/images/dances/oyillattam.jpg',
     color: Color(0xFF0288D1),
     description:
         'Oyillattam (Dance of Grace) is a traditional dance where performers wear colorful small towels on their hands and perform rhythmic steps to the accompaniment of drums. It was traditionally a male dance but is now performed by all.',
@@ -166,7 +166,7 @@ const List<CultureItem> allCultures = [
     emoji: '🎎',
     category: 'Folk',
     assetFolder: 'bommalattam',
-    imagePath: 'assets/images/dances/bommalattam.png',
+    imagePath: 'assets/images/dances/bommalattam.jpg',
     color: Color(0xFF5C6BC0),
     description:
         'Bommalattam (Puppet Show) is a traditional puppet theater from Tamil Nadu. It uses large puppets controlled by strings and wires. The stories are usually based on folklore or religious epics.',
@@ -181,7 +181,7 @@ const List<CultureItem> allCultures = [
     emoji: '🏹',
     category: 'Folk',
     assetFolder: 'villupaatu',
-    imagePath: 'assets/images/dances/villu_paatu.png',
+    imagePath: 'assets/images/dances/villu_paatu.jpg',
     color: Color(0xFFD32F2F),
     description:
         'Villu Paatu (Bow Song) is an ancient form of musical story-telling. The lead singer uses a large bow decorated with bells as a primary musical instrument. The songs usually tell stories of local heroes or mythical events.',
@@ -196,7 +196,7 @@ const List<CultureItem> allCultures = [
     emoji: '🪄',
     category: 'Folk',
     assetFolder: 'kolattam',
-    imagePath: 'assets/images/dances/kolattam.png',
+    imagePath: 'assets/images/dances/kolattam.jpg',
     color: Color(0xFF7B1FA2),
     description:
         'Kolattam is an ancient village art performed with small wooden sticks. Dancers strike their sticks against each other or their partners sticks in rhythmic patterns while moving in circles or complex formations.',
@@ -211,7 +211,7 @@ const List<CultureItem> allCultures = [
     emoji: '🐎',
     category: 'Folk',
     assetFolder: 'poikkalkuthirai',
-    imagePath: 'assets/images/dances/poikkal_kuthirai.png',
+    imagePath: 'assets/images/dances/poikkal_kuthirai.jpg',
     color: Color(0xFF5D4037),
     description:
         'Poikkal Kuthirai (Fake Leg Horse) is a folk dance where performers carry a dummy horse shell around their waist. They wear wooden stilts and mimic the graceful movements of a horse, often telling stories of legendary heroes.',
@@ -226,7 +226,7 @@ const List<CultureItem> allCultures = [
     emoji: '🦚',
     category: 'Folk',
     assetFolder: 'mayilaattam',
-    imagePath: 'assets/images/dances/mayil_aattam.png',
+    imagePath: 'assets/images/dances/mayil_aattam.jpg',
     color: Color(0xFF00838F),
     description:
         'Mayil Aattam (Peacock Dance) is a traditional dance where performers dress as peacocks with a beak and a tail of feathers. The movements are choreographed to mimic the graceful gestures and turns of a peacock.',
@@ -241,7 +241,7 @@ const List<CultureItem> allCultures = [
     emoji: '🛡️',
     category: 'Folk',
     assetFolder: 'devaraattam',
-    imagePath: 'assets/images/dances/devaraattam.png',
+    imagePath: 'assets/images/dances/devaraattam.jpg',
     color: Color(0xFFF57F17),
     description:
         'Devaraattam (Dance of the Devas) is a pure rhythmic folk dance performed by the Rajakambalam Nayakar community. It is performed to the beat of the "Urumi" and "Dundubi" drums and is characterized by its powerful energy.',
@@ -256,7 +256,7 @@ const List<CultureItem> allCultures = [
     emoji: '🐍',
     category: 'Folk',
     assetFolder: 'paampuattam',
-    imagePath: 'assets/images/dances/paampu_attam.png',
+    imagePath: 'assets/images/dances/paampu_attam.jpg',
     color: Color(0xFF558B2F),
     description:
         'Paampu Attam (Snake Dance) is a folk dance where performers wear a body-tight suit that looks like a snake skin. They mimic the slithering, creeping, and posing movements of a cobra to the music of the Magudi.',
@@ -271,7 +271,7 @@ const List<CultureItem> allCultures = [
     emoji: '🥁',
     category: 'Folk',
     assetFolder: 'paraiattam',
-    imagePath: 'assets/images/dances/paraiattam.png',
+    imagePath: 'assets/images/dances/paraiattam.jpg',
     color: Color(0xFFE64A19),
     description:
         'Paraiattam is a traditional dance involving the Parai, one of the oldest drums in India. The dance is characterized by energetic leaps and fast rhythmic patterns, historically used to announce messages or celebrate festivals.',

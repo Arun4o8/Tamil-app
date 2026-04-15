@@ -83,8 +83,8 @@ final List<FlashcardItem> colorsList = [
   FlashcardItem('மஞ்சள்', 'Manjal', 'Yellow', Colors.orangeAccent),
   FlashcardItem('ஆரஞ்சு', 'Orange', 'Orange', Colors.orange),
   FlashcardItem('ஊதா', 'Oodha', 'Purple / Violet', Colors.purple),
-  FlashcardItem('கருப்பு', 'Karuppu', 'Black', Colors.black87),
-  FlashcardItem('வெள்ளை', 'Vellai', 'White', Colors.grey.shade400),
+  FlashcardItem('கருப்பு', 'Karuppu', 'Black', Colors.blueGrey),
+  FlashcardItem('வெள்ளை', 'Vellai', 'White', Colors.white70),
 ];
 
 // ─── MAIN SCREEN ─────────────────────────────────────────────────────────────
@@ -114,50 +114,43 @@ class _TamilLearningScreenState extends State<TamilLearningScreen> with SingleTi
   Widget build(BuildContext context) {
     final lang = XRTamilKidsApp.of(context).language;
     final su = ScreenUtils(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: KidsColors.backgroundLight,
+      backgroundColor: isDark ? KidsColors.backgroundDark : KidsColors.backgroundLight,
       appBar: AppBar(
-        title: Text(translate('Learn Tamil', lang), style: KidsText.title(su.titleFontSize)),
-        backgroundColor: KidsColors.white,
-        centerTitle: false,
+        title: Text(translate('Learn Tamil', lang), 
+          style: KidsText.title(22).copyWith(color: isDark ? KidsColors.textPrimary : KidsColors.dark)),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
           indicatorColor: KidsColors.saffron,
-          indicatorWeight: 4,
+          indicatorWeight: 3,
           labelColor: KidsColors.saffron,
-          unselectedLabelColor: KidsColors.grey,
-          labelStyle: KidsText.label(14),
+          unselectedLabelColor: KidsColors.textSecondary,
+          labelStyle: KidsText.label(14, fontWeight: FontWeight.w800),
           unselectedLabelStyle: KidsText.body(14),
+          indicatorPadding: const EdgeInsets.symmetric(horizontal: 10),
           tabs: const [
-            Tab(text: 'Vowels', icon: Icon(Icons.sort_by_alpha_rounded)),
-            Tab(text: 'Consonants', icon: Icon(Icons.spellcheck_rounded)),
-            Tab(text: 'Numbers', icon: Icon(Icons.format_list_numbered_rounded)),
-            Tab(text: 'Colors', icon: Icon(Icons.color_lens_rounded)),
-            Tab(text: 'Basics', icon: Icon(Icons.forum_rounded)),
+            Tab(text: 'Vowels'),
+            Tab(text: 'Consonants'),
+            Tab(text: 'Numbers'),
+            Tab(text: 'Colors'),
+            Tab(text: 'Basics'),
           ],
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [KidsColors.backgroundLight, Color(0xFFF9F0E6)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: TabBarView(
-          controller: _tabController,
-          children: [
-            _FlashcardGrid(items: vowels, su: su),
-            _FlashcardGrid(items: consonants, su: su),
-            _FlashcardGrid(items: numbers, su: su),
-            _FlashcardGrid(items: colorsList, su: su),
-            _FlashcardList(items: basics, su: su),
-          ],
-        ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _FlashcardGrid(items: vowels, su: su, isDark: isDark),
+          _FlashcardGrid(items: consonants, su: su, isDark: isDark),
+          _FlashcardGrid(items: numbers, su: su, isDark: isDark),
+          _FlashcardGrid(items: colorsList, su: su, isDark: isDark),
+          _FlashcardList(items: basics, su: su, isDark: isDark),
+        ],
       ),
     );
   }
@@ -167,22 +160,23 @@ class _TamilLearningScreenState extends State<TamilLearningScreen> with SingleTi
 class _FlashcardGrid extends StatelessWidget {
   final List<FlashcardItem> items;
   final ScreenUtils su;
-  const _FlashcardGrid({required this.items, required this.su});
+  final bool isDark;
+  const _FlashcardGrid({required this.items, required this.su, required this.isDark});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.all(su.horizontalPad),
+      padding: EdgeInsets.fromLTRB(su.horizontalPad, 20, su.horizontalPad, 40),
       itemCount: items.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: su.isTablet ? 4 : (su.width > 400 ? 3 : 2),
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.9,
+        childAspectRatio: 0.85,
       ),
       itemBuilder: (context, index) {
-        return _FlipCard(item: items[index], su: su);
+        return _FlipCard(item: items[index], su: su, isDark: isDark);
       },
     );
   }
@@ -192,20 +186,21 @@ class _FlashcardGrid extends StatelessWidget {
 class _FlashcardList extends StatelessWidget {
   final List<FlashcardItem> items;
   final ScreenUtils su;
-  const _FlashcardList({required this.items, required this.su});
+  final bool isDark;
+  const _FlashcardList({required this.items, required this.su, required this.isDark});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.all(su.horizontalPad),
+      padding: EdgeInsets.fromLTRB(su.horizontalPad, 20, su.horizontalPad, 40),
       itemCount: items.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: SizedBox(
-            height: su.fluid(140.0, 150.0, 160.0, 180.0),
-            child: _FlipCard(item: items[index], su: su),
+            height: 140,
+            child: _FlipCard(item: items[index], su: su, isDark: isDark),
           ),
         );
       },
@@ -217,8 +212,9 @@ class _FlashcardList extends StatelessWidget {
 class _FlipCard extends StatefulWidget {
   final FlashcardItem item;
   final ScreenUtils su;
+  final bool isDark;
 
-  const _FlipCard({required this.item, required this.su});
+  const _FlipCard({required this.item, required this.su, required this.isDark});
 
   @override
   State<_FlipCard> createState() => _FlipCardState();
@@ -234,10 +230,10 @@ class _FlipCardState extends State<_FlipCard> with SingleTickerProviderStateMixi
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 500),
     );
     _animation = Tween(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack),
     );
   }
 
@@ -269,7 +265,7 @@ class _FlipCardState extends State<_FlipCard> with SingleTickerProviderStateMixi
           
           return Transform(
             transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001) // perspective
+              ..setEntry(3, 2, 0.001)
               ..rotateY(angle),
             alignment: Alignment.center,
             child: isUnder ? _buildBackSide() : _buildFrontSide(),
@@ -282,12 +278,15 @@ class _FlipCardState extends State<_FlipCard> with SingleTickerProviderStateMixi
   Widget _buildFrontSide() {
     return Container(
       decoration: BoxDecoration(
-        color: KidsColors.white,
-        borderRadius: BorderRadius.circular(widget.su.cardRadius),
-        border: Border.all(color: widget.item.color.withAlpha(40), width: 3),
+        color: widget.isDark ? KidsColors.surfaceDark : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: _isFront ? widget.item.color.withAlpha(80) : Colors.transparent, 
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: widget.item.color.withAlpha(40),
+            color: widget.item.color.withAlpha(widget.isDark ? 20 : 40),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -296,65 +295,56 @@ class _FlipCardState extends State<_FlipCard> with SingleTickerProviderStateMixi
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // ── Tamil character centred ──────────────────────────────────────
-          Positioned.fill(
-            bottom: 36,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    widget.item.tamilText,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: widget.item.tamilText.length > 5
-                          ? widget.su.fluid(24.0, 28.0, 32.0, 36.0)
-                          : widget.su.fluid(54.0, 64.0, 72.0, 84.0),
-                      fontWeight: FontWeight.w900,
-                      color: widget.item.color,
-                      height: 1.1,
-                    ),
+          // Background Glow
+          if (widget.isDark)
+            Positioned(
+              top: -20, right: -20,
+              child: Container(
+                width: 60, height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: widget.item.color.withAlpha(15),
+                ),
+              ),
+            ),
+          
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  widget.item.tamilText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: widget.item.tamilText.length > 5 ? 28 : 64,
+                    fontWeight: FontWeight.w900,
+                    color: widget.item.color,
+                    fontFamily: 'NotoSansTamil',
+                    shadows: widget.isDark ? [
+                      Shadow(color: widget.item.color.withAlpha(100), blurRadius: 15)
+                    ] : null,
                   ),
                 ),
               ),
             ),
           ),
 
-          // ── "Tap to flip" badge at bottom ───────────────────────────────
           Positioned(
-            bottom: 8,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 120),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: widget.item.color.withAlpha(22),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: widget.item.color.withAlpha(70), width: 1),
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.touch_app_rounded, size: 14, color: widget.item.color),
-                        const SizedBox(width: 5),
-                        Text(
-                          'Tap to flip',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            color: widget.item.color,
-                            letterSpacing: 0.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+            bottom: 12,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: widget.item.color.withAlpha(15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                'TAP TO REVEAL',
+                style: TextStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w900,
+                  color: widget.item.color.withAlpha(180),
+                  letterSpacing: 1.5,
                 ),
               ),
             ),
@@ -371,41 +361,41 @@ class _FlipCardState extends State<_FlipCard> with SingleTickerProviderStateMixi
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [widget.item.color, widget.item.color.withAlpha(200)],
+            colors: [widget.item.color, widget.item.color.withAlpha(180)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(widget.su.cardRadius),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: widget.item.color.withAlpha(80),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Center(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.item.englishText,
-                    textAlign: TextAlign.center,
-                    style: KidsText.display(widget.su.fluid(24.0, 26.0, 30.0, 34.0), color: Colors.white),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.item.description,
-                    textAlign: TextAlign.center,
-                    style: KidsText.body(widget.su.fluid(13.0, 14.0, 15.0, 16.0), color: Colors.white70),
-                  ),
-                ],
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.item.englishText,
+                textAlign: TextAlign.center,
+                style: KidsText.display(28, color: Colors.white).copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
-            ),
+              const SizedBox(height: 10),
+              Text(
+                widget.item.description,
+                textAlign: TextAlign.center,
+                style: KidsText.body(14, color: Colors.white.withAlpha(200)).copyWith(
+                  fontWeight: FontWeight.w600,
+                  height: 1.4,
+                ),
+              ),
+            ],
           ),
         ),
       ),

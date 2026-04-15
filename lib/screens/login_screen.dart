@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen>
         children: [
           // ── Full-screen background image ──────────────────────────────────
           Image.asset(
-            'assets/login_bg.png',
+            'assets/login_bg.jpg',
             fit: BoxFit.cover,
             width: size.width,
             height: size.height,

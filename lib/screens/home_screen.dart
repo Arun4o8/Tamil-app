@@ -88,22 +88,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   children: [
                     _ActionHubCard(
                       title: translate('Dances', lang),
-                      imagePath: 'assets/images/app/home_dance.png',
+                      imagePath: 'assets/images/app/home_dance.jpg',
                       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ExploreScreen())),
                     ),
                     _ActionHubCard(
                       title: translate('Celebration', lang),
-                      imagePath: 'assets/images/app/home_celeb.png',
+                      imagePath: 'assets/images/app/home_celeb.jpg',
                       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CelebrationsScreen())),
                     ),
                     _ActionHubCard(
                       title: translate('Learn Tamil', lang),
-                      imagePath: 'assets/images/app/home_learn.png',
+                      imagePath: 'assets/images/app/home_learn.jpg',
                       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TamilLearningScreen())),
                     ),
                     _ActionHubCard(
                       title: translate('Quizzes', lang),
-                      imagePath: 'assets/images/app/home_quiz.png',
+                      imagePath: 'assets/images/app/home_quiz.jpg',
                       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QuizIntroScreen())),
                     ),
                   ],

@@ -58,40 +58,50 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Avatar
+                          // Avatar with Progress Ring
                           Stack(
-                            alignment: Alignment.bottomRight,
+                            alignment: Alignment.center,
                             children: [
-                              Container(
-                                width: 84, height: 84,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: isDark ? KidsColors.saffron.withAlpha(100) : Colors.white,
-                                    width: 2.5,
-                                  ),
-                                  gradient: isDark
-                                      ? const RadialGradient(
-                                          colors: [Color(0xFF2A2240), Color(0xFF1A1230)])
-                                      : null,
-                                  color: isDark ? null : Colors.white.withAlpha(30),
+                              SizedBox(
+                                width: 92, height: 92,
+                                child: CircularProgressIndicator(
+                                  value: (service.totalExplored / 14).clamp(0.0, 1.0),
+                                  strokeWidth: 4,
+                                  backgroundColor: Colors.white12,
+                                  color: KidsColors.saffron,
                                 ),
-                                child: Icon(Icons.person, size: 46,
-                                    color: isDark ? KidsColors.saffron.withAlpha(180) : Colors.white),
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: isDark ? KidsColors.surfaceMid : Colors.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: KidsColors.saffron.withAlpha(80)),
-                                ),
-                                child: const Icon(Icons.camera_alt, size: 12, color: KidsColors.saffron),
+                              Stack(
+                                alignment: Alignment.bottomRight,
+                                children: [
+                                  Container(
+                                    width: 78, height: 78,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: isDark ? KidsColors.surfaceMid : Colors.white,
+                                        width: 2,
+                                      ),
+                                      color: isDark ? const Color(0xFF2A2240) : Colors.white24,
+                                    ),
+                                    child: Icon(Icons.person, size: 40,
+                                        color: isDark ? KidsColors.saffron.withAlpha(200) : Colors.white),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: isDark ? KidsColors.surfaceMid : Colors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: KidsColors.saffron.withAlpha(80)),
+                                    ),
+                                    child: const Icon(Icons.camera_alt, size: 10, color: KidsColors.saffron),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
-                          // Name: show saved or default
+                          const SizedBox(height: 12),
+                          // Name
                           GestureDetector(
                             onTap: () => Navigator.push(context,
                               MaterialPageRoute(builder: (_) => const EditProfileScreen())),
@@ -105,7 +115,7 @@ class ProfileScreen extends StatelessWidget {
                                       : 'Heritage Explorer',
                                   style: GoogleFonts.poppins(
                                     color: isDark ? KidsColors.textPrimary : Colors.white,
-                                    fontSize: 20, fontWeight: FontWeight.w700,
+                                    fontSize: 18, fontWeight: FontWeight.w700,
                                   )),
                                 const SizedBox(width: 6),
                                 Icon(Icons.edit_rounded,
@@ -114,15 +124,25 @@ class ProfileScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Text(
-                            service.userEmail.isNotEmpty
-                                ? service.userEmail
-                                : 'Tamil Culture Enthusiast',
+                          // Rank Banner
+                          Container(
+                            margin: const EdgeInsets.only(top: 4),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: KidsColors.saffron.withAlpha(isDark ? 30 : 50),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: KidsColors.saffron.withAlpha(80)),
+                            ),
+                            child: Text(
+                              _getRankName(service.totalExplored),
                               style: GoogleFonts.nunito(
-                                color: isDark ? KidsColors.textSecondary : Colors.white70,
-                                fontSize: 13, fontWeight: FontWeight.w600,
-                              )),
-                          const SizedBox(height: 10),
+                                fontSize: 10,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -303,6 +323,11 @@ class ProfileScreen extends StatelessWidget {
         );
       },
     );
+  String _getRankName(int explored) {
+    if (explored >= 12) return 'CODEX GUARDIAN';
+    if (explored >= 8) return 'HERITAGE SCHOLAR';
+    if (explored >= 4) return 'CULTURAL EXPLORER';
+    return 'NOVICE LEARNER';
   }
 }
 

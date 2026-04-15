@@ -10,9 +10,13 @@ workflows:
     scripts:
       - name: Get Flutter dependencies
         script: flutter pub get
+      - name: Set iOS Deployment Target
+        script: |
+          # Force the deployment target in the project file
+          find . -name "project.pbxproj" -exec sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 15.5/g' {} +
       - name: Build iOS
         script: | 
-          # This builds the iOS app WITHOUT codesigning so you can get the IPA file
+          # Build and force the Podfile version if it exists
           flutter build ios --debug --no-codesign
     artifacts:
       - build/ios/iphoneos/*.app

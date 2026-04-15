@@ -10,8 +10,33 @@ workflows:
     scripts:
       - name: Get Flutter dependencies
         script: flutter pub get
+
+      - name: Patch Podfile deployment target
+        script: |
+          # Flutter generates a Podfile during build - we patch it AFTER pub get
+          # Run flutter setup to generate the Podfile first
+          cd ios
+          flutter build ios --config-only 2>/dev/null || true
+          # Now append post_install hook if not already present
+          if ! grep -q "IPHONEOS_DEPLOYMENT_TARGET" Podfile; then
+            echo "" >> Podfile
+            echo "post_install do |installer|" >> Podfile
+            echo "  installer.pods_project.targets.each do |target|" >> Podfile
+            echo "    flutter_additional_ios_build_settings(target)" >> Podfile
+            echo "    target.build_configurations.each do |config|" >> Podfile
+            echo "      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.5'" >> Podfile
+            echo "    end" >> Podfile
+            echo "  end" >> Podfile
+            echo "end" >> Podfile
+          fi
+          cd ..
+
+      - name: Run pod install
+        script: cd ios && pod install
+
       - name: Build iOS
-        script: flutter build ios --debug --no-codesign
+        script: flutter build ios --debug --no-codesign --no-pub
+
     artifacts:
       - build/ios/iphoneos/*.app
       - build/ios/ipa/*.ipa

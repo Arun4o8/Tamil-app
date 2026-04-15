@@ -10,21 +10,59 @@ workflows:
     scripts:
       - name: Get Flutter dependencies
         script: flutter pub get
-      - name: Set iOS Deployment Target
+
+      - name: Replace broken Podfile with clean one
         script: |
-          # Force the deployment target in the project file
-          find . -name "project.pbxproj" -exec sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 15.5/g' {} +
+          # Flutter generates a bad Podfile with newer Xcode — replace it entirely
+          cat > ios/Podfile << 'PODFILE_EOF'
+          platform :ios, '15.5'
+          ENV['COCOAPODS_DISABLE_STATS'] = '1'
+
+          def flutter_root
+            generated_xcode_build_settings_path = File.expand_path(
+              File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__
+            )
+            unless File.exist?(generated_xcode_build_settings_path)
+              raise "#{generated_xcode_build_settings_path} must exist. Run flutter pub get first."
+            end
+            File.foreach(generated_xcode_build_settings_path) do |line|
+              matches = line.match(/\AFLUTTER_ROOT=(.*)\n/)
+              return matches[1] if matches
+            end
+            raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}."
+          end
+
+          require File.expand_path(
+            File.join('..', 'Flutter', 'generated_plugin_pods.rb'), __FILE__
+          )
+
+          target 'Runner' do
+            use_frameworks!
+            use_modular_headers!
+            flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+          end
+
+          post_install do |installer|
+            installer.pods_project.targets.each do |target|
+              flutter_additional_ios_build_settings(target)
+              target.build_configurations.each do |config|
+                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.5'
+              end
+            end
+          end
+          PODFILE_EOF
+
       - name: Build iOS
-        script: | 
-          # Build and force the Podfile version if it exists
+        script: |
           flutter build ios --debug --no-codesign
+
     artifacts:
       - build/ios/iphoneos/*.app
       - build/ios/ipa/*.ipa
     publishing:
       email:
         recipients:
-          - your-email@example.com # You can change this later
+          - okerj849@gmail.com
         notify:
           success: true
           failure: true

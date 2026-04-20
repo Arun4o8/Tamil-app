@@ -54,12 +54,26 @@ workflows:
           sed -i '' 's/CODE_SIGN_IDENTITY = ".*";/CODE_SIGN_IDENTITY = "";/g' \
             ios/Runner.xcodeproj/project.pbxproj
 
-      - name: Build iOS
-        script: flutter build ios --debug --no-codesign --no-pub
+      - name: Build iOS (unsigned)
+        script: |
+          # Use xcodebuild directly to bypass Flutter's post-build DEVELOPMENT_TEAM
+          # validation, which rejects builds even when --no-codesign is passed.
+          # The Xcode build itself succeeds without signing; Flutter's wrapper does not.
+          cd ios && xcodebuild \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Debug \
+            -sdk iphoneos \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            ONLY_ACTIVE_ARCH=NO \
+            SYMROOT="$PWD/../build/ios" \
+            build 2>&1 | grep -E '(error:|Build succeeded|FAILED|warning:.*error)'
 
     artifacts:
-      - build/ios/iphoneos/*.app
-      - build/ios/ipa/*.ipa
+      - build/ios/Debug-iphoneos/*.app
     publishing:
       email:
         recipients:

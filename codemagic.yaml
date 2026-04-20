@@ -34,6 +34,7 @@ workflows:
                      "    flutter_additional_ios_build_settings(target)\n" \
                      "    target.build_configurations.each do |config|\n" \
                      "      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.5'\n" \
+                     "      config.build_settings['SWIFT_VERSION'] = '5.0'\n" \
                      "    end\n" \
                      "  end\n" \
                      "end\n"
@@ -70,7 +71,7 @@ workflows:
             DEVELOPMENT_TEAM="" \
             ONLY_ACTIVE_ARCH=NO \
             SYMROOT="$PWD/../build/ios" \
-            build 2>&1 | grep -E '(error:|Build succeeded|FAILED|warning:.*error)'
+            build
 
     artifacts:
       - build/ios/Debug-iphoneos/*.app

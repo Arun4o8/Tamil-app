@@ -130,7 +130,7 @@ class _TamilLearningScreenState extends State<TamilLearningScreen> with SingleTi
           indicatorWeight: 3,
           labelColor: KidsColors.saffron,
           unselectedLabelColor: KidsColors.textSecondary,
-          labelStyle: KidsText.label(14, fontWeight: FontWeight.w800),
+          labelStyle: KidsText.label(14).copyWith(fontWeight: FontWeight.w800),
           unselectedLabelStyle: KidsText.body(14),
           indicatorPadding: const EdgeInsets.symmetric(horizontal: 10),
           tabs: const [

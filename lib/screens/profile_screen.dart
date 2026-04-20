@@ -323,6 +323,8 @@ class ProfileScreen extends StatelessWidget {
         );
       },
     );
+  }
+
   String _getRankName(int explored) {
     if (explored >= 12) return 'CODEX GUARDIAN';
     if (explored >= 8) return 'HERITAGE SCHOLAR';

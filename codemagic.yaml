@@ -11,10 +11,16 @@ workflows:
       - name: Get Flutter dependencies
         script: flutter pub get
 
+      - name: Generate Flutter iOS config files
+        script: |
+          # This generates ios/Flutter/generated_plugin_pods.rb, Generated.xcconfig,
+          # and other required files — it also auto-generates a Podfile (which we overwrite next).
+          flutter build ios --config-only --no-pub 2>/dev/null || true
+
       - name: Restore clean Podfile
         script: |
-          # Use our pre-crafted Podfile that already has a single, correct post_install hook.
-          # This prevents Flutter's generated Podfile from causing duplicate post_install errors.
+          # Overwrite the auto-generated Podfile with our known-good version that has
+          # exactly one post_install hook with the correct deployment target.
           cp ios/Podfile.clean ios/Podfile
 
       - name: Run pod install

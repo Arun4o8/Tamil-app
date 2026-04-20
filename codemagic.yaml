@@ -13,13 +13,12 @@ workflows:
 
       - name: Generate iOS config files
         script: |
-          # Generates ios/Flutter/generated_plugin_pods.rb, Generated.xcconfig,
-          # and the ios/Podfile. Must run BEFORE pod install.
+          # Generates Generated.xcconfig and generated_plugin_pods.rb.
+          # Must run BEFORE pod install. config-only mode does not validate the team.
           flutter build ios --config-only --no-codesign
 
       - name: Fix Podfile deployment target
         script: |
-          # Remove duplicate post_install blocks and set the correct deployment target.
           ruby - <<'RUBY'
           podfile_path = 'ios/Podfile'
           content = File.read(podfile_path)
@@ -46,36 +45,49 @@ workflows:
       - name: Run pod install
         script: cd ios && pod install
 
-      - name: Patch signing config for unsigned build
+      - name: Clear code signing from Xcode project
         script: |
-          # Flutter requires DEVELOPMENT_TEAM to be a non-empty string even with
-          # --no-codesign. A placeholder value passes Flutter's validator without
-          # needing real Apple Developer credentials. The --no-codesign flag tells
-          # Flutter/Xcode to skip actual code signing entirely.
           PBXPROJ="ios/Runner.xcodeproj/project.pbxproj"
-
-          # Replace any DEVELOPMENT_TEAM value (including empty "") with a placeholder
-          sed -i '' 's/DEVELOPMENT_TEAM = [^;]*;/DEVELOPMENT_TEAM = PLACEHOLDER1;/g' "$PBXPROJ"
-
-          # Clear code sign identity so Xcode does not search for a certificate
+          # Wipe team ID and code sign identity — xcodebuild will be instructed via
+          # build settings overrides as well, but clearing the pbxproj avoids any
+          # automatic signing escalation from Xcode 16.
+          sed -i '' 's/DEVELOPMENT_TEAM = [^;]*;/DEVELOPMENT_TEAM = "";/g' "$PBXPROJ"
           sed -i '' 's/CODE_SIGN_IDENTITY = ".*";/CODE_SIGN_IDENTITY = "";/g' "$PBXPROJ"
-
-          # Use Manual signing so Xcode does not auto-fill team/profile
           sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PBXPROJ"
-
-          echo "Signing config patched. Verifying..."
+          echo "--- Signing config after patch ---"
           grep -E "DEVELOPMENT_TEAM|CODE_SIGN" "$PBXPROJ" | sort -u
 
       - name: Build iOS (unsigned)
         script: |
-          # Flutter drives the full build pipeline (links Flutter engine, frameworks, etc.)
-          # --no-codesign skips signing; placeholder DEVELOPMENT_TEAM satisfies the
-          # non-empty team check without real credentials.
-          # Output artifact: build/ios/iphoneos/Runner.app
-          flutter build ios --debug --no-codesign --no-pub
+          # flutter build ios --no-codesign runs the Xcode build successfully but then
+          # Flutter's post-build validator rejects the result because it requires a real
+          # Apple Developer Team for device builds (no bypass exists at the Flutter level).
+          #
+          # xcodebuild has no such validator. -derivedDataPath places ALL output under
+          # build/derived/ in a well-known structure so the artifact glob is reliable.
+          # Flutter's xcode_backend.sh build phases still run inside xcodebuild, so the
+          # Flutter engine, Dart code, and assets are properly embedded in the .app.
+          cd ios && xcodebuild \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Debug \
+            -sdk iphoneos \
+            -derivedDataPath "$PWD/../build/derived" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            ONLY_ACTIVE_ARCH=NO \
+            build
+
+          echo "--- Locating built Runner.app ---"
+          find "$PWD/../build/derived" -name "Runner.app" -type d 2>/dev/null \
+            || echo "WARNING: Runner.app not found under build/derived"
 
     artifacts:
-      - build/ios/iphoneos/*.app
+      # xcodebuild with -derivedDataPath always outputs to:
+      # <derivedDataPath>/Build/Products/<Configuration>-<sdk>/<Product>.app
+      - build/derived/Build/Products/Debug-iphoneos/*.app
     publishing:
       email:
         recipients:

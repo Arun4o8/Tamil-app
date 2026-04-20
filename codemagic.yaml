@@ -6,7 +6,7 @@ workflows:
     environment:
       flutter: stable
       xcode: 16.2
-      cocoapods: 1.15.2
+      cocoapods: 1.16.2
     scripts:
       - name: Get Flutter dependencies
         script: flutter pub get
@@ -44,6 +44,15 @@ workflows:
 
       - name: Run pod install
         script: cd ios && pod install
+
+      - name: Clear code signing from Xcode project
+        script: |
+          # Flutter requires DEVELOPMENT_TEAM to be present (even empty) for --no-codesign
+          # to work on device builds. Clear any team ID from the Xcode project.
+          sed -i '' 's/DEVELOPMENT_TEAM = [A-Z0-9]*;/DEVELOPMENT_TEAM = "";/g' \
+            ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' 's/CODE_SIGN_IDENTITY = ".*";/CODE_SIGN_IDENTITY = "";/g' \
+            ios/Runner.xcodeproj/project.pbxproj
 
       - name: Build iOS
         script: flutter build ios --debug --no-codesign --no-pub

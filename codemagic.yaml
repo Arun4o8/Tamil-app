@@ -9,24 +9,26 @@ workflows:
       cocoapods: 1.15.2
     scripts:
       - name: Get Flutter dependencies
-        script: |
-          flutter precache --ios
-          flutter pub get
+        script: flutter pub get
 
-      - name: Fix Podfile post_install hooks
+      - name: Generate iOS config files
         script: |
-          # Flutter's pub get on macOS generates ios/Flutter/generated_plugin_pods.rb
-          # and a Podfile. We surgically fix any duplicate post_install blocks in the
-          # generated Podfile rather than replacing it, so the require line is preserved.
+          # Generates ios/Flutter/generated_plugin_pods.rb, Generated.xcconfig,
+          # and the ios/Podfile. Must run BEFORE pod install.
+          flutter build ios --config-only
+
+      - name: Fix Podfile deployment target
+        script: |
+          # Remove duplicate post_install blocks and set the correct deployment target.
           ruby - <<'RUBY'
           podfile_path = 'ios/Podfile'
           content = File.read(podfile_path)
 
-          # Remove ALL existing post_install blocks
+          # Remove ALL existing post_install blocks (handles single or multiple)
           content.gsub!(/^post_install\s+do\s+\|[^|]*\|.*?^end\n?/m, '')
           content.rstrip!
 
-          # Append a single, correct post_install block
+          # Append exactly one correct post_install block
           content += "\n\npost_install do |installer|\n" \
                      "  installer.pods_project.targets.each do |target|\n" \
                      "    flutter_additional_ios_build_settings(target)\n" \
@@ -37,7 +39,7 @@ workflows:
                      "end\n"
 
           File.write(podfile_path, content)
-          puts "Podfile post_install hooks fixed successfully."
+          puts "Podfile fixed."
           RUBY
 
       - name: Run pod install

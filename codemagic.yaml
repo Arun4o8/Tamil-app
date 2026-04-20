@@ -46,35 +46,36 @@ workflows:
       - name: Run pod install
         script: cd ios && pod install
 
-      - name: Clear code signing from Xcode project
+      - name: Patch signing config for unsigned build
         script: |
-          # Flutter requires DEVELOPMENT_TEAM to be present (even empty) for --no-codesign
-          # to work on device builds. Clear any team ID from the Xcode project.
-          sed -i '' 's/DEVELOPMENT_TEAM = [A-Z0-9]*;/DEVELOPMENT_TEAM = "";/g' \
-            ios/Runner.xcodeproj/project.pbxproj
-          sed -i '' 's/CODE_SIGN_IDENTITY = ".*";/CODE_SIGN_IDENTITY = "";/g' \
-            ios/Runner.xcodeproj/project.pbxproj
+          # Flutter requires DEVELOPMENT_TEAM to be a non-empty string even with
+          # --no-codesign. A placeholder value passes Flutter's validator without
+          # needing real Apple Developer credentials. The --no-codesign flag tells
+          # Flutter/Xcode to skip actual code signing entirely.
+          PBXPROJ="ios/Runner.xcodeproj/project.pbxproj"
+
+          # Replace any DEVELOPMENT_TEAM value (including empty "") with a placeholder
+          sed -i '' 's/DEVELOPMENT_TEAM = [^;]*;/DEVELOPMENT_TEAM = PLACEHOLDER1;/g' "$PBXPROJ"
+
+          # Clear code sign identity so Xcode does not search for a certificate
+          sed -i '' 's/CODE_SIGN_IDENTITY = ".*";/CODE_SIGN_IDENTITY = "";/g' "$PBXPROJ"
+
+          # Use Manual signing so Xcode does not auto-fill team/profile
+          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PBXPROJ"
+
+          echo "Signing config patched. Verifying..."
+          grep -E "DEVELOPMENT_TEAM|CODE_SIGN" "$PBXPROJ" | sort -u
 
       - name: Build iOS (unsigned)
         script: |
-          # Use xcodebuild directly to bypass Flutter's post-build DEVELOPMENT_TEAM
-          # validation, which rejects builds even when --no-codesign is passed.
-          # The Xcode build itself succeeds without signing; Flutter's wrapper does not.
-          cd ios && xcodebuild \
-            -workspace Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Debug \
-            -sdk iphoneos \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            DEVELOPMENT_TEAM="" \
-            ONLY_ACTIVE_ARCH=NO \
-            SYMROOT="$PWD/../build/ios" \
-            build
+          # Flutter drives the full build pipeline (links Flutter engine, frameworks, etc.)
+          # --no-codesign skips signing; placeholder DEVELOPMENT_TEAM satisfies the
+          # non-empty team check without real credentials.
+          # Output artifact: build/ios/iphoneos/Runner.app
+          flutter build ios --debug --no-codesign --no-pub
 
     artifacts:
-      - build/ios/Debug-iphoneos/*.app
+      - build/ios/iphoneos/*.app
     publishing:
       email:
         recipients:

@@ -9,19 +9,36 @@ workflows:
       cocoapods: 1.15.2
     scripts:
       - name: Get Flutter dependencies
-        script: flutter pub get
-
-      - name: Generate Flutter iOS config files
         script: |
-          # This generates ios/Flutter/generated_plugin_pods.rb, Generated.xcconfig,
-          # and other required files — it also auto-generates a Podfile (which we overwrite next).
-          flutter build ios --config-only --no-pub 2>/dev/null || true
+          flutter precache --ios
+          flutter pub get
 
-      - name: Restore clean Podfile
+      - name: Fix Podfile post_install hooks
         script: |
-          # Overwrite the auto-generated Podfile with our known-good version that has
-          # exactly one post_install hook with the correct deployment target.
-          cp ios/Podfile.clean ios/Podfile
+          # Flutter's pub get on macOS generates ios/Flutter/generated_plugin_pods.rb
+          # and a Podfile. We surgically fix any duplicate post_install blocks in the
+          # generated Podfile rather than replacing it, so the require line is preserved.
+          ruby - <<'RUBY'
+          podfile_path = 'ios/Podfile'
+          content = File.read(podfile_path)
+
+          # Remove ALL existing post_install blocks
+          content.gsub!(/^post_install\s+do\s+\|[^|]*\|.*?^end\n?/m, '')
+          content.rstrip!
+
+          # Append a single, correct post_install block
+          content += "\n\npost_install do |installer|\n" \
+                     "  installer.pods_project.targets.each do |target|\n" \
+                     "    flutter_additional_ios_build_settings(target)\n" \
+                     "    target.build_configurations.each do |config|\n" \
+                     "      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.5'\n" \
+                     "    end\n" \
+                     "  end\n" \
+                     "end\n"
+
+          File.write(podfile_path, content)
+          puts "Podfile post_install hooks fixed successfully."
+          RUBY
 
       - name: Run pod install
         script: cd ios && pod install
